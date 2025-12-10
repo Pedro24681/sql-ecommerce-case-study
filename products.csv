@@ -1,0 +1,21 @@
+ProductID,ProductName,Category,Price,StockQuantity,Supplier,CreatedDate
+P001,Wireless Headphones Pro,Electronics,129.99,45,TechSupply Co,2022-05-10
+P002,USB-C Cable 3m,Electronics,19.99,150,CableWorks,2022-06-15
+P003,Phone Case Premium,Accessories,24.99,200,AccessoryHub,2022-07-20
+P004,Screen Protector Tempered Glass,Accessories,9.99,300,AccessoryHub,2022-08-10
+P005,Portable Power Bank 20000mAh,Electronics,49.99,80,PowerTech,2022-09-05
+P006,Laptop Stand Adjustable,Office,45.99,60,WorkSpace,2022-01-15
+P007,Wireless Mouse Silent,Electronics,34.99,120,TechSupply Co,2022-02-20
+P008,Mechanical Keyboard RGB,Electronics,89.99,70,TechSupply Co,2022-03-10
+P009,Monitor Arm Dual,Office,59.99,50,WorkSpace,2022-04-12
+P010,LED Desk Lamp Dimmable,Office,39.99,85,LightWorks,2022-05-20
+P011,USB Hub 7-Port,Electronics,29.99,110,CableWorks,2022-06-15
+P012,Screen Protector Film,Accessories,14.99,250,AccessoryHub,2022-07-18
+P013,4K Webcam,Electronics,79.99,65,TechSupply Co,2022-08-25
+P014,USB Microphone Studio,Electronics,99.99,55,AudioTech,2022-09-10
+P015,Laptop Bag 15 inch,Accessories,59.99,40,AccessoryHub,2022-10-20
+P016,Phone Ring Stand,Accessories,12.99,180,AccessoryHub,2022-11-15
+P017,Bluetooth Speaker Portable,Electronics,149.99,35,AudioTech,2022-12-20
+P018,Document Camera,Office,199.99,25,TechSupply Co,2023-01-10
+P019,Ergonomic Mouse Pad,Office,19.99,140,WorkSpace,2023-02-15
+P020,Cable Organizer Set,Accessories,14.99,220,AccessoryHub,2023-03-20
