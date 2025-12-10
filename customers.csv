@@ -1,0 +1,21 @@
+CustomerID,CustomerName,Email,Country,City,SignUpDate,LifetimeValue,LastPurchaseDate,IsActive
+C001,John Anderson,john.anderson@email.com,USA,New York,2023-01-15,2450.50,2025-12-08,true
+C002,Sarah Mitchell,sarah.mitchell@email.com,USA,Los Angeles,2023-02-20,3120.75,2025-12-09,true
+C003,Michael Chen,michael.chen@email.com,Canada,Toronto,2023-03-10,1895.25,2025-12-05,true
+C004,Emma Watson,emma.watson@email.com,UK,London,2023-04-05,2789.00,2025-12-07,true
+C005,James Rodriguez,james.rodriguez@email.com,USA,Chicago,2023-05-12,1650.40,2025-11-30,true
+C006,Lisa Johnson,lisa.johnson@email.com,USA,Houston,2023-06-18,2340.65,2025-12-09,true
+C007,Robert Brown,robert.brown@email.com,Australia,Sydney,2023-07-22,1920.30,2025-12-02,true
+C008,Jennifer Lee,jennifer.lee@email.com,USA,Phoenix,2023-08-14,2560.80,2025-12-08,true
+C009,David Martinez,david.martinez@email.com,Mexico,Mexico City,2023-09-03,1245.15,2025-12-01,true
+C010,Nicole Taylor,nicole.taylor@email.com,USA,Philadelphia,2023-10-11,2875.45,2025-12-09,true
+C011,Christopher White,christopher.white@email.com,Canada,Vancouver,2023-11-08,1680.20,2025-11-28,true
+C012,Amanda Harris,amanda.harris@email.com,USA,San Antonio,2023-12-01,2195.60,2025-12-06,true
+C013,Daniel King,daniel.king@email.com,UK,Manchester,2024-01-19,1420.85,2025-11-25,false
+C014,Rachel Clark,rachel.clark@email.com,USA,San Diego,2024-02-14,2710.30,2025-12-08,true
+C015,Kevin Anderson,kevin.anderson@email.com,Australia,Melbourne,2024-03-22,1890.75,2025-12-04,true
+C016,Sophie Garcia,sophie.garcia@email.com,Spain,Barcelona,2024-04-10,2380.50,2025-12-07,true
+C017,Matthew Lewis,matthew.lewis@email.com,USA,Dallas,2024-05-17,1565.40,2025-12-03,true
+C018,Victoria Young,victoria.young@email.com,Canada,Montreal,2024-06-25,2640.95,2025-12-09,true
+C019,Anthony Hall,anthony.hall@email.com,USA,Austin,2024-07-20,1730.25,2025-11-29,true
+C020,Katherine Moore,katherine.moore@email.com,Germany,Berlin,2024-08-30,2455.70,2025-12-08,true
