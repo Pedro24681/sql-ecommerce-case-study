@@ -1,0 +1,31 @@
+OrderID,CustomerID,OrderDate,TotalAmount,OrderStatus,ShippingAddress
+O001,C001,2023-02-10,189.97,Completed,123 Main St New York NY 10001
+O002,C002,2023-02-15,159.96,Completed,456 Oak Ave Los Angeles CA 90001
+O003,C003,2023-03-05,209.95,Completed,789 Maple Dr Toronto ON M5V 3A8
+O004,C001,2023-04-12,299.90,Completed,123 Main St New York NY 10001
+O005,C004,2023-05-20,129.99,Completed,321 Pine St London W1A 1AA
+O006,C005,2023-06-08,149.96,Completed,654 Elm Rd Chicago IL 60601
+O007,C003,2023-07-15,329.88,Completed,789 Maple Dr Toronto ON M5V 3A8
+O008,C006,2023-08-22,99.98,Completed,987 Cedar Ln Houston TX 77001
+O009,C002,2023-09-10,189.98,Completed,456 Oak Ave Los Angeles CA 90001
+O010,C008,2023-10-18,179.97,Completed,147 Birch St Vancouver BC V6B 1A8
+O011,C010,2023-11-25,249.95,Completed,258 Willow Way Philadelphia PA 19101
+O012,C001,2023-12-15,149.99,Completed,123 Main St New York NY 10001
+O013,C011,2024-01-20,189.97,Completed,369 Oak Hill Sydney NSW 2000
+O014,C012,2024-02-28,159.98,Completed,456 Pine Ave San Antonio TX 78201
+O015,C013,2024-03-10,209.95,Completed,789 Elm St Manchester M1 1AD
+O016,C015,2024-04-22,329.87,Completed,147 Spruce Ln San Diego CA 92101
+O017,C003,2024-05-15,249.98,Completed,789 Maple Dr Toronto ON M5V 3A8
+O018,C010,2024-06-20,189.96,Completed,258 Willow Way Philadelphia PA 19101
+O019,C016,2024-07-25,99.98,Completed,369 Summit Dr Barcelona 08002
+O020,C012,2024-08-30,179.97,Completed,456 Pine Ave San Antonio TX 78201
+O021,C020,2024-09-15,159.98,Completed,789 Sunset Blvd Berlin 10115
+O022,C013,2024-10-12,249.99,Completed,789 Elm St Manchester M1 1AD
+O023,C001,2024-11-08,189.98,Completed,123 Main St New York NY 10001
+O024,C015,2024-12-05,209.95,Completed,147 Spruce Ln San Diego CA 92101
+O025,C008,2025-01-10,149.99,Completed,147 Birch St Vancouver BC V6B 1A8
+O026,C011,2025-02-15,189.97,Completed,369 Oak Hill Sydney NSW 2000
+O027,C020,2025-03-22,329.96,Completed,789 Sunset Blvd Berlin 10115
+O028,C002,2025-04-18,249.95,Completed,456 Oak Ave Los Angeles CA 90001
+O029,C005,2025-05-25,179.98,Completed,654 Elm Rd Chicago IL 60601
+O030,C003,2025-06-30,159.97,Completed,789 Maple Dr Toronto ON M5V 3A8
