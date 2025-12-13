@@ -11,42 +11,92 @@
 -- =====================================================
 -- QUESTION 1: TOP-SELLING PRODUCT CATEGORY
 -- =====================================================
+-- BUSINESS CONTEXT:
 -- Identify the best-performing product categories by total revenue
--- and their contribution to overall sales
+-- and their contribution to overall sales. This helps prioritize
+-- inventory investment, marketing budget allocation, and identify
+-- underperforming categories for optimization.
+--
+-- SQL TECHNIQUES USED:
+-- - Multi-table INNER JOINs (4 tables)
+-- - Window function: RANK() for performance ranking
+-- - Window function: SUM() OVER () for percentage calculation
+-- - Aggregate functions: COUNT(), SUM(), AVG()
+-- - Date filtering with INTERVAL for rolling 12-month analysis
+--
+-- BUSINESS VALUE:
+-- - Guide inventory purchasing decisions
+-- - Allocate marketing spend to high-performing categories
+-- - Identify growth opportunities in underperforming segments
 
 SELECT 
     pc.category_id,
     pc.category_name,
+    -- Count unique orders per category (measures market reach)
     COUNT(DISTINCT oi.order_id) AS total_orders,
+    -- Total units sold (measures volume/velocity)
     COUNT(oi.order_item_id) AS total_items_sold,
+    -- Total revenue generated (primary success metric)
     ROUND(SUM(oi.quantity * oi.unit_price)::NUMERIC, 2) AS total_revenue,
+    -- Percentage contribution to overall revenue (identifies dominant categories)
+    -- TECHNIQUE: Window function SUM() OVER () computes grand total without subquery
     ROUND(
         SUM(oi.quantity * oi.unit_price) / 
         SUM(SUM(oi.quantity * oi.unit_price)) OVER ()::NUMERIC * 100,
         2
     ) AS revenue_percentage,
+    -- Average revenue per order item (measures transaction value)
     ROUND(AVG(oi.quantity * oi.unit_price)::NUMERIC, 2) AS avg_order_value,
+    -- Performance ranking (1 = best performing category)
+    -- TECHNIQUE: RANK() window function provides competitive ranking
     RANK() OVER (ORDER BY SUM(oi.quantity * oi.unit_price) DESC) AS category_rank
 FROM 
     product_categories pc
+    -- Join to products to get category-product mapping
     INNER JOIN products p ON pc.category_id = p.category_id
+    -- Join to order_items to get transaction details
     INNER JOIN order_items oi ON p.product_id = oi.product_id
+    -- Join to orders to filter by date and get order context
     INNER JOIN orders o ON oi.order_id = o.order_id
 WHERE 
+    -- Only include last 12 months for current trend analysis
+    -- TECHNIQUE: INTERVAL provides portable date arithmetic
     o.order_date >= CURRENT_DATE - INTERVAL '12 months'
 GROUP BY 
+    -- Group by category to aggregate metrics per category
     pc.category_id,
     pc.category_name
 ORDER BY 
+    -- Sort by revenue descending to show best performers first
     total_revenue DESC;
 
 
 -- =====================================================
 -- QUESTION 2: TOP CUSTOMERS BY REVENUE
 -- =====================================================
--- Identify high-value customers and their purchasing patterns
--- Including purchase frequency and average transaction value
+-- BUSINESS CONTEXT:
+-- Identify high-value customers and analyze their purchasing patterns
+-- including purchase frequency and average transaction value. This enables
+-- targeted retention programs, VIP customer management, and calculation
+-- of customer acquisition ROI.
+--
+-- SQL TECHNIQUES USED:
+-- - Common Table Expression (CTE) for organizing complex logic
+-- - Multiple aggregate functions: COUNT(), SUM(), AVG(), MIN(), MAX()
+-- - Window functions: RANK(), ROW_NUMBER() for ranking customers
+-- - CASE statement for customer segmentation (VIP, Premium, Regular, At-Risk)
+-- - Date arithmetic for calculating purchase intervals
+-- - LEFT JOIN to include customers who haven't ordered yet
+-- - NULLIF() for division by zero protection
+--
+-- BUSINESS VALUE:
+-- - Identify VIP customers for retention and loyalty programs
+-- - Segment customers for personalized marketing campaigns
+-- - Calculate acceptable customer acquisition cost (CAC) based on LTV
+-- - Understand purchase frequency patterns for re-engagement timing
 
+-- CTE: Calculate key metrics for each customer
+-- TECHNIQUE: CTEs improve readability and allow referencing intermediate results
 WITH customer_metrics AS (
     SELECT 
         c.customer_id,
@@ -335,9 +385,34 @@ ORDER BY
 -- =====================================================
 -- QUESTION 6: CHURN RISK ANALYSIS
 -- =====================================================
--- Identify at-risk customers and predict churn probability
--- Based on recency, frequency, and monetary value
+-- BUSINESS CONTEXT:
+-- Identify customers at risk of churning and predict churn probability
+-- using RFM (Recency, Frequency, Monetary) analysis. This enables
+-- proactive retention campaigns, prioritizes at-risk customers, and
+-- measures effectiveness of win-back programs.
+--
+-- SQL TECHNIQUES USED:
+-- - Multiple CTEs: customer_rfm, churn_scoring (staged calculation approach)
+-- - RFM Analysis methodology (industry-standard customer segmentation)
+-- - Window function: PERCENT_RANK() for percentile scoring
+-- - Complex CASE statements for 5-point scoring system
+-- - Multiple classification dimensions (risk status, customer status)
+-- - Custom ranking with multi-condition CASE in ORDER BY
+--
+-- BUSINESS VALUE:
+-- - Proactive churn prevention (intervene before customer leaves)
+-- - Prioritize retention efforts by risk level (optimize spend)
+-- - Calculate potential revenue recovery from win-back campaigns
+-- - Segment customers for tailored re-engagement strategies
+--
+-- RFM METHODOLOGY:
+-- Recency (R): Days since last purchase (lower is better)
+-- Frequency (F): Total number of orders (higher is better)
+-- Monetary (M): Total amount spent (higher is better)
+-- Each dimension scored 1-5, combined to assess customer value and churn risk
 
+-- CTE 1: Calculate RFM metrics for each customer
+-- TECHNIQUE: Aggregate customer order history into RFM dimensions
 WITH customer_rfm AS (
     SELECT 
         c.customer_id,
@@ -364,6 +439,8 @@ WITH customer_rfm AS (
         c.email,
         c.country
 ),
+-- CTE 2: Apply RFM scoring methodology
+-- TECHNIQUE: Convert continuous metrics to discrete 1-5 scores for segmentation
 churn_scoring AS (
     SELECT 
         customer_id,
@@ -375,14 +452,16 @@ churn_scoring AS (
         frequency_orders,
         monetary_value,
         customer_tenure_years,
-        -- Calculate percentile scores for RFM
+        -- Calculate percentile ranks for statistical context
+        -- TECHNIQUE: PERCENT_RANK() returns 0-1 indicating relative position
         PERCENT_RANK() OVER (ORDER BY recency_days) AS recency_percentile,
         PERCENT_RANK() OVER (ORDER BY frequency_orders) AS frequency_percentile,
         PERCENT_RANK() OVER (ORDER BY monetary_value) AS monetary_percentile,
-        -- Recency score (lower is better)
+        -- Recency score: Lower days = higher score (5 = most recent)
+        -- BUSINESS LOGIC: Recent customers are less likely to churn
         CASE 
-            WHEN recency_days <= 30 THEN 5
-            WHEN recency_days <= 60 THEN 4
+            WHEN recency_days <= 30 THEN 5  -- Purchased within last month
+            WHEN recency_days <= 60 THEN 4  -- Purchased 1-2 months ago
             WHEN recency_days <= 90 THEN 3
             WHEN recency_days <= 180 THEN 2
             ELSE 1
