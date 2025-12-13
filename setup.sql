@@ -170,6 +170,10 @@ INSERT INTO Orders (OrderID, CustomerID, OrderDate, TotalAmount, OrderStatus, Sh
 ('O010', 'C003', '2023-10-05', 345.90, 'Completed', '789 Maple Dr, Toronto, ON M5V 3A8');
 
 -- Add more orders to create meaningful analytics
+-- NOTE: Dates span from 2023 to 2025. For time-series queries to work correctly,
+-- you may want to update these dates to be relative to your current date.
+-- For example, recent orders should be within the last 30-90 days for
+-- "active customer" queries to return meaningful results.
 INSERT INTO Orders (OrderID, CustomerID, OrderDate, TotalAmount, OrderStatus, ShippingAddress) VALUES
 ('O011', 'C008', '2023-11-12', 289.95, 'Completed', '111 Lake St, Chicago, IL 60601'),
 ('O012', 'C009', '2023-12-01', 789.80, 'Completed', '222 Harbor Dr, Sydney, NSW 2000'),

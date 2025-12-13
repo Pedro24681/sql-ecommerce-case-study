@@ -5,9 +5,11 @@
 The E-Commerce Analytics database follows a **normalized relational design** optimized for analytical queries while maintaining data integrity. The schema supports comprehensive business intelligence operations including customer analytics, product performance tracking, and order analysis.
 
 **Database Name:** `ecommerce_analytics`  
-**Database System:** MySQL 8.0+ / PostgreSQL 12+  
+**Database System:** MySQL 8.0+ (setup.sql) / PostgreSQL 12+ (analytics queries)  
 **Design Pattern:** Star Schema (Fact & Dimension Tables)  
 **Normalization Level:** 3NF (Third Normal Form)
+
+> **Note on SQL Dialects:** The schema creation (`setup.sql`, `01_schema_creation.sql`) uses MySQL syntax, while the analytical queries (`02_business_questions.sql`, `03_advanced_analytics.sql`) demonstrate PostgreSQL features. The queries showcase advanced SQL concepts that can be adapted to either database with minor syntax adjustments. See the [README.md](README.md) for dialect-specific notes.
 
 ---
 

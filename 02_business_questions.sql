@@ -5,6 +5,17 @@
 -- Purpose: Answer 6 core business questions using advanced SQL techniques
 -- Created: 2025-12-10
 -- Author: Pedro24681
+-- Database: PostgreSQL 12+ (uses PostgreSQL-specific syntax)
+--
+-- SYNTAX NOTE: This file uses PostgreSQL syntax (::NUMERIC casting, INTERVAL).
+-- To run on MySQL, convert syntax as follows:
+--   - ::NUMERIC → CAST(... AS DECIMAL(10,2))
+--   - INTERVAL '12 months' → INTERVAL 12 MONTH
+--   - CURRENT_DATE → CURDATE()
+--   - Table/column names to match actual schema
+--
+-- The analytical patterns and business logic are universal and demonstrate
+-- advanced SQL concepts applicable to any modern SQL database.
 -- =====================================================
 
 

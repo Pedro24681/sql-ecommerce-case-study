@@ -1,6 +1,19 @@
 -- ============================================================================
 -- ADVANCED SQL ANALYTICS QUERIES FOR E-COMMERCE CASE STUDY
 -- ============================================================================
+-- File: 03_advanced_analytics.sql
+-- Database: SQL Server / PostgreSQL (uses ANSI SQL with some dialect-specific functions)
+-- 
+-- SYNTAX NOTE: This file demonstrates advanced analytical patterns using SQL Server
+-- and PostgreSQL syntax (DATEDIFF, DATEADD, DATEPART for SQL Server; some queries
+-- use PostgreSQL patterns). To adapt for other databases:
+--   - SQL Server DATEADD() → PostgreSQL date + INTERVAL
+--   - SQL Server DATEDIFF() → PostgreSQL date subtraction
+--   - Check date/time function compatibility
+--
+-- The queries showcase advanced SQL techniques (window functions, CTEs, cohort
+-- analysis) that are conceptually universal across modern SQL databases.
+--
 -- This file contains advanced SQL analytics queries including:
 -- - Window Functions
 -- - Common Table Expressions (CTEs)

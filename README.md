@@ -191,8 +191,18 @@ This project answers critical business questions:
 ## 🛠️ Technical Implementation
 
 ### SQL Dialects Supported
-- **MySQL 8.0+** (Primary)
-- **PostgreSQL 12+** (Minor syntax adjustments needed)
+
+This project demonstrates SQL concepts using both MySQL and PostgreSQL syntax:
+
+- **setup.sql & 01_schema_creation.sql**: MySQL 8.0+ syntax (AUTO_INCREMENT, MySQL functions)
+- **02_business_questions.sql & 03_advanced_analytics.sql**: PostgreSQL 12+ syntax (::NUMERIC casting, INTERVAL)
+
+> **💡 Learning Note:** The queries showcase advanced SQL patterns applicable to both databases. Converting between dialects typically requires minor adjustments:
+> - PostgreSQL `::NUMERIC` → MySQL `CAST(... AS DECIMAL)`  
+> - PostgreSQL `INTERVAL '12 months'` → MySQL `INTERVAL 12 MONTH`  
+> - PostgreSQL-specific table references updated to match actual schema
+
+**For Production Use:** Choose one database and apply consistent syntax throughout. The analytical patterns and business logic remain universal.
 
 ### Query Complexity Levels
 - **Beginner**: Basic SELECT, WHERE, GROUP BY
