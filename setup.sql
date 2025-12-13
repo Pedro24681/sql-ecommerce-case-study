@@ -402,22 +402,22 @@ FROM Orders;
 -- ============================================================================
 
 SELECT '
-╔════════════════════════════════════════════════════════════════╗
-║                                                                ║
-║        ✅  DATABASE SETUP COMPLETED SUCCESSFULLY!  ✅          ║
-║                                                                ║
-║  Database: ecommerce_analytics                                ║
-║  Tables: 4 (Customers, Products, Orders, Order_Details)       ║
-║  Sample Data: Loaded and validated                            ║
-║                                                                ║
-║  Next Steps:                                                   ║
-║  1. Explore queries in 02_business_questions.sql              ║
-║  2. Try advanced analytics in 03_advanced_analytics.sql       ║
-║  3. Review QUERIES_GUIDE.md for detailed documentation        ║
-║                                                                ║
-║  Happy querying! 🚀                                            ║
-║                                                                ║
-╚════════════════════════════════════════════════════════════════╝
+================================================================================
+                                                                
+         DATABASE SETUP COMPLETED SUCCESSFULLY!          
+                                                                
+  Database: ecommerce_analytics                                
+  Tables: 4 (Customers, Products, Orders, Order_Details)       
+  Sample Data: Loaded and validated                            
+                                                                
+  Next Steps:                                                   
+  1. Explore queries in 02_business_questions.sql              
+  2. Try advanced analytics in 03_advanced_analytics.sql       
+  3. Review QUERIES_GUIDE.md for detailed documentation        
+                                                                
+  Happy querying!                                            
+                                                                
+================================================================================
 ' AS 'Setup Status';
 
 -- Display database summary
