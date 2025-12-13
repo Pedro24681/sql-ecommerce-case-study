@@ -1,0 +1,83 @@
+# SQL Project .gitignore
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+*.db-shm
+*.db-wal
+
+# MySQL dumps
+*.sql.gz
+*.dump
+
+# Log files
+*.log
+error.log
+query.log
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.swp
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE and editor files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+.project
+.settings/
+*.code-workspace
+
+# Python (if using Python scripts for data processing)
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+.venv
+pip-log.txt
+
+# Node.js (if using Node for any tooling)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Credentials and sensitive data
+credentials.json
+secrets.json
+.env
+.env.local
+config.local.*
+
+# Output and generated files
+output/
+exports/
+reports/
+*.xlsx
+*.xls
+
+# Test and backup files
+test_output/
+backup/
+*.backup
+
+# Documentation build artifacts
+docs/_build/
+site/

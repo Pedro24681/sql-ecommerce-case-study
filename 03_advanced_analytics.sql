@@ -1,6 +1,19 @@
 -- ============================================================================
 -- ADVANCED SQL ANALYTICS QUERIES FOR E-COMMERCE CASE STUDY
 -- ============================================================================
+-- File: 03_advanced_analytics.sql
+-- Database: SQL Server / PostgreSQL (uses ANSI SQL with some dialect-specific functions)
+-- 
+-- SYNTAX NOTE: This file demonstrates advanced analytical patterns using SQL Server
+-- and PostgreSQL syntax (DATEDIFF, DATEADD, DATEPART for SQL Server; some queries
+-- use PostgreSQL patterns). To adapt for other databases:
+--   - SQL Server DATEADD() → PostgreSQL date + INTERVAL
+--   - SQL Server DATEDIFF() → PostgreSQL date subtraction
+--   - Check date/time function compatibility
+--
+-- The queries showcase advanced SQL techniques (window functions, CTEs, cohort
+-- analysis) that are conceptually universal across modern SQL databases.
+--
 -- This file contains advanced SQL analytics queries including:
 -- - Window Functions
 -- - Common Table Expressions (CTEs)
@@ -17,17 +30,47 @@
 -- ============================================================================
 -- 1. WINDOW FUNCTIONS - SALES RANKINGS AND CUMULATIVE ANALYSIS
 -- ============================================================================
+-- BUSINESS CONTEXT:
+-- Demonstrate advanced window function patterns for ranking products,
+-- calculating running totals, and analyzing customer purchase sequences.
+-- These techniques enable sophisticated analytics without complex subqueries.
+--
+-- SQL TECHNIQUES DEMONSTRATED:
+-- - RANK() vs DENSE_RANK() vs ROW_NUMBER() (different ranking behaviors)
+-- - LAG() and LEAD() for accessing adjacent rows
+-- - SUM() OVER() for running totals
+-- - PARTITION BY for windowing within groups
+-- - Multiple window functions in single query
+--
+-- BUSINESS APPLICATIONS:
+-- - Product performance rankings within categories
+-- - Identifying top performers and long-tail products
+-- - Calculating cumulative sales contribution
+-- - Understanding 80/20 rule (Pareto principle) in practice
 
 -- Query 1.1: Product Sales Ranking with Running Total
--- Shows rank, dense rank, and cumulative sales per product
+-- BUSINESS VALUE: Identify which products drive revenue and understand
+-- cumulative sales distribution (e.g., "top 10 products = 60% of sales")
 SELECT 
     p.product_id,
     p.product_name,
     c.category_name,
+    -- Total revenue per product
     SUM(oi.quantity * oi.unit_price) AS total_sales,
+    -- Rank within category: 1 = best in category
+    -- TECHNIQUE: PARTITION BY creates separate rankings per category
+    -- RANK() allows ties (two products can share rank 1)
     RANK() OVER (PARTITION BY c.category_id ORDER BY SUM(oi.quantity * oi.unit_price) DESC) AS sales_rank_in_category,
+    -- Overall rank across all products
+    -- TECHNIQUE: DENSE_RANK() like RANK() but no gaps in numbering
+    -- (if two products tie at 1, next is 2, not 3)
     DENSE_RANK() OVER (ORDER BY SUM(oi.quantity * oi.unit_price) DESC) AS overall_sales_rank,
+    -- Running total of sales (cumulative revenue)
+    -- TECHNIQUE: Window function SUM() calculates running total
+    -- Useful for identifying "top X products that generate Y% of revenue"
     SUM(SUM(oi.quantity * oi.unit_price)) OVER (ORDER BY SUM(oi.quantity * oi.unit_price) DESC) AS cumulative_sales,
+    -- Sequential number within category (always unique)
+    -- TECHNIQUE: ROW_NUMBER() never ties, assigns unique sequential numbers
     ROW_NUMBER() OVER (PARTITION BY c.category_id ORDER BY SUM(oi.quantity * oi.unit_price) DESC) AS row_num
 FROM products p
 INNER JOIN categories c ON p.category_id = c.category_id
@@ -37,16 +80,28 @@ ORDER BY overall_sales_rank;
 
 
 -- Query 1.2: Customer Purchase Frequency with Window Functions
--- Calculates days since last purchase and purchase velocity
+-- BUSINESS VALUE: Understand customer ordering patterns, identify purchase
+-- velocity trends, and determine optimal re-engagement timing
 SELECT 
     customer_id,
     order_id,
     order_date,
     order_total,
+    -- Date of previous order for this customer
+    -- TECHNIQUE: LAG() accesses previous row within partition
+    -- PARTITION BY customer_id creates separate windows per customer
     LAG(order_date) OVER (PARTITION BY customer_id ORDER BY order_date) AS previous_order_date,
+    -- Days between this order and previous order
+    -- BUSINESS LOGIC: Short intervals = high engagement, long intervals = risk
     DATEDIFF(DAY, LAG(order_date) OVER (PARTITION BY customer_id ORDER BY order_date), order_date) AS days_since_last_order,
+    -- Total orders for this customer (same value on all rows for a customer)
+    -- TECHNIQUE: COUNT(*) OVER with PARTITION BY but no ORDER BY
     COUNT(*) OVER (PARTITION BY customer_id) AS total_customer_orders,
+    -- Sequential order number for this customer (1st, 2nd, 3rd order, etc.)
+    -- BUSINESS LOGIC: Behavior often differs between 1st, 2nd, 3rd+ purchases
     ROW_NUMBER() OVER (PARTITION BY customer_id ORDER BY order_date) AS order_sequence,
+    -- Date of next order (NULL if this is the last order)
+    -- TECHNIQUE: LEAD() accesses next row within partition
     LEAD(order_date) OVER (PARTITION BY customer_id ORDER BY order_date) AS next_order_date
 FROM orders
 ORDER BY customer_id, order_date;
@@ -168,9 +223,39 @@ ORDER BY revenue_change DESC;
 -- ============================================================================
 -- 3. CUSTOMER SEGMENTATION ANALYSIS
 -- ============================================================================
+-- BUSINESS CONTEXT:
+-- Segment customers using RFM (Recency, Frequency, Monetary) methodology,
+-- an industry-standard approach for customer value analysis. This enables
+-- targeted marketing, personalized engagement, and resource optimization.
+--
+-- SQL TECHNIQUES DEMONSTRATED:
+-- - Multiple CTEs: customer_metrics, rfm_scoring (staged calculations)
+-- - NTILE() for quintile/percentile scoring (divides into equal groups)
+-- - Complex CASE statements for business rule segmentation
+-- - DATEDIFF() for temporal analysis
+--
+-- BUSINESS APPLICATIONS:
+-- - Identify "Champions" (best customers) for VIP treatment
+-- - Find "At Risk" customers for retention campaigns
+-- - Segment "Can't Lose Them" (high value, declining) for win-back
+-- - Target "Potential Loyalists" for engagement programs
+--
+-- RFM SCORING METHODOLOGY:
+-- Each customer scored 1-5 on three dimensions:
+-- - Recency: How recently did they purchase? (5 = most recent)
+-- - Frequency: How often do they purchase? (5 = most frequent)
+-- - Monetary: How much do they spend? (5 = highest spend)
+--
+-- SEGMENT DEFINITIONS:
+-- - Champions: High R, F, M (best customers)
+-- - Loyal: High F, M; medium-high R (consistent buyers)
+-- - At Risk: Low R; previously medium-high F, M (declining engagement)
+-- - Can't Lose: Low R; high M (valuable but inactive)
+-- - Potential Loyalists: High R; medium F, M (recent, growing)
 
 -- Query 3.1: RFM Segmentation (Recency, Frequency, Monetary)
--- Segments customers based on purchase behavior
+-- BUSINESS VALUE: Prioritize marketing spend and retention efforts based on
+-- customer value and engagement level
 WITH customer_metrics AS (
     SELECT 
         c.customer_id,
