@@ -5,7 +5,12 @@
 [![Analytics](https://img.shields.io/badge/Analytics-Business%20Intelligence-green.svg)](https://github.com/Pedro24681/sql-ecommerce-case-study)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-> A comprehensive SQL case study demonstrating advanced query techniques, business analytics, and data-driven insights for e-commerce operations.
+> # SQL E-Commerce Analytics Case Study
+
+In this project, I worked with a realistic e-commerce dataset to explore real business questions using SQL. My goal was to build analytical queries that help answer questions about sales performance, customer behavior, and product trends — the kinds of questions a data analyst would tackle in a real company.
+
+I designed the database schema, wrote queries to answer specific business questions, and used advanced SQL features like window functions and CTEs to derive deeper insights. Throughout this case study I document my approach, share results, and explain what the findings mean in a business context.
+
 
 
 
@@ -66,13 +71,16 @@ source setup.sql
 
 # Key Features & Skills Demonstrated
 
-# Advanced SQL Techniques
--  **Window Functions** - ROW_NUMBER(), RANK(), LAG(), LEAD(), NTILE()
--  **Common Table Expressions (CTEs)** - Multi-level, recursive patterns
--  **Complex Joins** - Multi-table relationships, self-joins
--  **Subqueries & Derived Tables** - Nested logic and optimization
--  **Date/Time Analysis** - Period-over-period comparisons, trends
--  **Conditional Aggregation** - CASE statements within aggregates
+## What I Did
+
+- Imported and modeled 4 core tables: Customers, Orders, Products, and Order Details
+- Defined relationships and ensured data integrity in setup scripts
+- Answered key business questions, including:
+  - Who are our most valuable customers?
+  - Which product categories drive the most revenue?
+  - What are month-over-month sales trends?
+- Applied advanced SQL techniques like window functions (e.g., `ROW_NUMBER()`, `LAG()`) and multi-level CTEs to solve more complex problems
+- Documented query logic and results so someone else can understand my decisions
 
 # Business Analytics
 -  **Customer Segmentation** - RFM analysis, cohort behavior
@@ -222,26 +230,6 @@ Dive into `03_advanced_analytics.sql` for complex multi-CTE patterns and sophist
 - [ARCHITECTURE.md](ARCHITECTURE.md) - System design thinking
 - [LEARNING_NOTES.md](LEARNING_NOTES.md) - Personal learning journey
 
-
-# Use Cases
-
-# For Job Seekers
-- **Portfolio piece** demonstrating advanced SQL skills
-- **Interview preparation** with real-world scenarios
-- **Technical assessment** practice problems
-- **Skills showcase** for data analyst roles
-
-# For Hiring Managers
-- **Assessment reference** for candidate evaluation
-- **Skill validation** across multiple SQL competencies
-- **Business acumen** evaluation through analytical thinking
-- **Code quality** standards demonstration
-
-# For Students
-- **Learning resource** for advanced SQL techniques
-- **Practice dataset** with realistic business context
-- **Query patterns** to adapt for other domains
-- **Best practices** in SQL development
 
 
 # Contributing
