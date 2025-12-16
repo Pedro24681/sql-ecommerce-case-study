@@ -19,7 +19,6 @@ I designed the database schema, wrote queries to answer specific business questi
 This repository showcases advanced SQL analytics applied to a realistic e-commerce database. It demonstrates proficiency in complex queries, window functions, CTEs, business intelligence, and translating data into actionable insights.
 
 
-# Quick Start
 
 # Prerequisites
 - MySQL 8.0+ or PostgreSQL 12+ installed
@@ -66,7 +65,8 @@ source setup.sql
 - **Products**: Catalog with pricing, inventory, and categories
 - **Order_Details**: Line-item details with calculated totals
 
- See [DATABASE_SCHEMA.md](DATABASE_SCHEMA.md) for complete schema documentation
+I put the full database schema in `DATABASE_SCHEMA.md`. It includes a diagram and description of each table’s columns and relationships.
+
 
 
 # Key Features & Skills Demonstrated
@@ -224,21 +224,11 @@ Focus on `02_business_questions.sql` to see practical applications of window fun
 # For Advanced Users
 Dive into `03_advanced_analytics.sql` for complex multi-CTE patterns and sophisticated business logic.
 
-# Documentation
-- [DATABASE_SCHEMA.md](DATABASE_SCHEMA.md) - Understand table structures
-- [QUERIES_GUIDE.md](QUERIES_GUIDE.md) - Query-by-query explanations
-- [ARCHITECTURE.md](ARCHITECTURE.md) - System design thinking
-- [LEARNING_NOTES.md](LEARNING_NOTES.md) - Personal learning journey
-
 
 
 # Contributing
 
-While this is a personal portfolio project, suggestions and feedback are welcome!
-
-1. Fork the repository
-2. Create a feature branch
-3. Submit a pull request with detailed description
+While this is a personal portfolio project for me, suggestions and feedback are welcome
 
 
 # License
