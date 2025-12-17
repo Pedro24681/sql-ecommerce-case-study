@@ -1,14 +1,13 @@
-# 🏛️ System Architecture & Design
+#  System Architecture & Design
 
 ## Overview
 
 This document outlines the **architectural approach**, **design philosophy**, and **analytical methodology** behind the E-Commerce SQL Case Study. It demonstrates system design thinking, data modeling principles, and scalable analytics architecture.
 
----
 
-## 🎯 Design Philosophy
+#  Design Philosophy
 
-### Core Principles
+# Core Principles
 
 1. **Data Integrity First** - Ensure accuracy through constraints and normalization
 2. **Query Performance** - Optimize for analytical workloads with strategic indexing
@@ -16,19 +15,18 @@ This document outlines the **architectural approach**, **design philosophy**, an
 4. **Scalability** - Design patterns that support growth without major refactoring
 5. **Business Alignment** - Schema reflects real-world business processes
 
-### Design Goals
+# Design Goals
 
-- ✅ **Analytical-Friendly Schema** - Star schema elements for fast aggregations
-- ✅ **Normalized Structure** - 3NF compliance to eliminate redundancy
-- ✅ **Self-Documenting** - Descriptive naming, inline comments, external docs
-- ✅ **Reproducible** - Automated setup scripts for consistent environments
-- ✅ **Production-Ready** - Proper indexing, constraints, and relationships
+-  **Analytical-Friendly Schema** - Star schema elements for fast aggregations
+-  **Normalized Structure** - 3NF compliance to eliminate redundancy
+-  **Self-Documenting** - Descriptive naming, inline comments, external docs
+-  **Reproducible** - Automated setup scripts for consistent environments
+-  **Production-Ready** - Proper indexing, constraints, and relationships
 
----
 
-## 🏗️ Architectural Layers
+#  Architectural Layers
 
-### 1. Data Storage Layer
+# 1. Data Storage Layer
 
 **Purpose:** Persistent storage with ACID compliance
 
@@ -55,9 +53,8 @@ This document outlines the **architectural approach**, **design philosophy**, an
 - InnoDB provides row-level locking for concurrent access
 - Clustered index on primary keys improves range scans
 
----
 
-### 2. Data Model Layer
+# 2. Data Model Layer
 
 **Purpose:** Logical representation of business entities
 
@@ -90,9 +87,8 @@ This document outlines the **architectural approach**, **design philosophy**, an
 - Intuitive business logic representation
 - Supports complex queries with CTEs
 
----
 
-### 3. Business Logic Layer
+# 3. Business Logic Layer
 
 **Purpose:** Transform raw data into business insights
 
@@ -122,9 +118,8 @@ This document outlines the **architectural approach**, **design philosophy**, an
 **Complexity Progression:**
 1. Simple aggregations → 2. Multi-table joins → 3. Window functions → 4. Multi-level CTEs
 
----
 
-### 4. Presentation Layer
+# 4. Presentation Layer
 
 **Purpose:** Communicate insights to stakeholders
 
@@ -140,11 +135,10 @@ This document outlines the **architectural approach**, **design philosophy**, an
 └─────────────────────────────────────────────────┘
 ```
 
----
 
-## 🔄 Data Flow Architecture
+# Data Flow Architecture
 
-### End-to-End Data Journey
+# End-to-End Data Journey
 
 ```
 ┌──────────────┐       ┌──────────────┐       ┌──────────────┐
@@ -164,7 +158,7 @@ This document outlines the **architectural approach**, **design philosophy**, an
                       Data Integrity
 ```
 
-### Detailed Flow
+# Detailed Flow
 
 **1. Data Ingestion:**
 - CSV files → `setup.sql` → INSERT statements
@@ -190,13 +184,12 @@ This document outlines the **architectural approach**, **design philosophy**, an
 - Business interpretations provided
 - Actionable recommendations
 
----
 
-## 📊 Analytical Approach
+# Analytical Approach
 
-### Query Design Patterns
+# Query Design Patterns
 
-#### Pattern 1: Multi-Level CTEs
+# Pattern 1: Multi-Level CTEs
 
 **Use Case:** Complex calculations requiring intermediate results
 
@@ -227,7 +220,7 @@ SELECT * FROM final_segmentation;
 - Product performance trends (Query 2.2)
 - Cohort retention analysis (Query 7.1)
 
-#### Pattern 2: Window Functions
+# Pattern 2: Window Functions
 
 **Use Case:** Ranking, running totals, period-over-period comparisons
 
@@ -252,7 +245,7 @@ FROM daily_sales;
 - Product rankings by category (Query 5.1)
 - Month-over-month growth (Query 6.1)
 
-#### Pattern 3: Conditional Aggregation
+# Pattern 3: Conditional Aggregation
 
 **Use Case:** Segmentation, pivot-like operations, metric variations
 
@@ -277,11 +270,10 @@ GROUP BY category;
 - Status-based order counts
 - Category performance matrices
 
----
 
-## 🎯 Business Intelligence Framework
+# Business Intelligence Framework
 
-### Analytical Categories
+# Analytical Categories
 
 **1. Customer Analytics**
 - **Segmentation:** RFM analysis, value tiers, lifecycle stages
@@ -298,7 +290,7 @@ GROUP BY category;
 - **Financial:** Revenue trends, cost metrics, profitability by segment
 - **Strategic:** Market penetration, competitive positioning, growth opportunities
 
-### Metric Hierarchy
+# Metric Hierarchy
 
 ```
 ┌─────────────────────────────────────────────────────┐
@@ -320,11 +312,10 @@ GROUP BY category;
 └──────────────┘      └──────────────┘   └──────────────┘
 ```
 
----
 
-## 🚀 Scalability Considerations
+# Scalability Considerations
 
-### Current State (MVP)
+# Current State (MVP)
 
 **Data Volume:**
 - 15 customers
@@ -334,7 +325,7 @@ GROUP BY category;
 
 **Query Performance:** Sub-second response times
 
-### Growth Projections
+# Growth Projections
 
 **5-Year Outlook:**
 - 10,000+ customers
@@ -342,9 +333,9 @@ GROUP BY category;
 - 100,000+ orders
 - 250,000+ line items
 
-### Scaling Strategies
+# Scaling Strategies
 
-#### 1. Horizontal Partitioning
+# 1. Horizontal Partitioning
 
 **Orders Table Partitioning:**
 ```sql
@@ -364,7 +355,7 @@ CREATE TABLE Orders (
 - Easier archival of historical data
 - Improved maintenance operations
 
-#### 2. Index Optimization
+# 2. Index Optimization
 
 **Composite Indexes for Common Queries:**
 ```sql
@@ -382,7 +373,7 @@ ON Order_Details(ProductID, OrderID);
 - Faster joins and filters
 - Lower memory footprint
 
-#### 3. Materialized Views
+# 3. Materialized Views
 
 **Pre-Aggregated Metrics:**
 ```sql
@@ -401,18 +392,17 @@ GROUP BY OrderDate;
 - Reduced computation overhead
 - Scheduled refresh process
 
-#### 4. Data Archival
+# 4. Data Archival
 
 **Cold Storage Strategy:**
 - Archive orders >2 years old to separate tables
 - Maintain hot data for active analytics
 - Union queries for historical reporting when needed
 
----
 
-## 🔒 Data Governance
+#  Data Governance
 
-### Quality Controls
+# Quality Controls
 
 **1. Constraint Enforcement:**
 - NOT NULL for required fields
@@ -432,7 +422,7 @@ GROUP BY OrderDate;
 - OrderDate - Transaction timeline
 - LastPurchaseDate - Recency tracking
 
-### Privacy & Compliance
+# Privacy & Compliance
 
 **PII Handling:**
 - Customer email addresses (UNIQUE, indexed)
@@ -444,11 +434,10 @@ GROUP BY OrderDate;
 - Data retention policies (archival strategy)
 - Access controls (application-layer enforcement)
 
----
 
-## 🧪 Testing Strategy
+#  Testing Strategy
 
-### Data Validation
+# Data Validation
 
 **1. Setup Verification:**
 - Record count checks after data load
@@ -462,7 +451,7 @@ GROUP BY OrderDate;
 - Performance benchmarking
 - Comparison across database engines
 
-### Quality Assurance
+# Quality Assurance
 
 **Query Categories:**
 - **Unit Tests:** Single-table operations
@@ -470,11 +459,10 @@ GROUP BY OrderDate;
 - **Regression Tests:** Known result validation
 - **Performance Tests:** Execution time tracking
 
----
 
-## 📈 Performance Optimization
+#  Performance Optimization
 
-### Query Optimization Techniques
+# Query Optimization Techniques
 
 **1. Index Usage:**
 - Always filter on indexed columns where possible
@@ -496,7 +484,7 @@ GROUP BY OrderDate;
 - Limit result sets early
 - Use HAVING only for aggregate conditions
 
-### Execution Plan Analysis
+# Execution Plan Analysis
 
 **Key Metrics:**
 - Rows examined vs. rows returned (selectivity)
@@ -504,11 +492,10 @@ GROUP BY OrderDate;
 - Join algorithm (nested loop, hash, merge)
 - Temporary table usage
 
----
 
-## 🛠️ Development Workflow
+#  Development Workflow
 
-### File Organization
+# File Organization
 
 ```
 sql-ecommerce-case-study/
@@ -539,7 +526,7 @@ sql-ecommerce-case-study/
     └── order_details.csv
 ```
 
-### Development Principles
+# Development Principles
 
 **1. Modularity:**
 - Each SQL file has a clear purpose
@@ -556,11 +543,10 @@ sql-ecommerce-case-study/
 - Meaningful commit messages
 - Feature branches for experimentation
 
----
 
-## 🎓 Learning Progression
+#  Learning Progression
 
-### Skill Development Path
+# Skill Development Path
 
 **Level 1: Foundation**
 - Schema design and normalization
@@ -582,11 +568,10 @@ sql-ecommerce-case-study/
 - Recursive queries
 - Query optimization and indexing
 
----
 
-## 🔗 Integration Points
+#  Integration Points
 
-### Potential Enhancements
+# Potential Enhancements
 
 **1. BI Tool Integration:**
 - Tableau / Power BI dashboards
@@ -608,31 +593,29 @@ sql-ecommerce-case-study/
 - Data quality validation scripts
 - Incremental load strategies
 
----
 
-## 📝 Best Practices Summary
+#  Best Practices Summary
 
-### Do's ✅
-- ✅ Use meaningful, descriptive names
-- ✅ Comment complex logic
-- ✅ Index foreign keys and date columns
-- ✅ Validate constraints at database level
-- ✅ Organize queries by business purpose
-- ✅ Test edge cases and NULL handling
-- ✅ Document assumptions and business rules
+# Do's 
+-  Use meaningful, descriptive names
+-  Comment complex logic
+-  Index foreign keys and date columns
+-  Validate constraints at database level
+-  Organize queries by business purpose
+-  Test edge cases and NULL handling
+-  Document assumptions and business rules
 
-### Don'ts ❌
-- ❌ Use SELECT * in production queries
-- ❌ Ignore execution plans
-- ❌ Over-index (too many indexes hurt writes)
-- ❌ Mix business logic across layers
-- ❌ Store unencrypted sensitive data
-- ❌ Skip referential integrity constraints
-- ❌ Use cursors when set-based operations work
+# Don'ts 
+-  Use SELECT * in production queries
+-  Ignore execution plans
+-  Over-index (too many indexes hurt writes)
+-  Mix business logic across layers
+-  Store unencrypted sensitive data
+-  Skip referential integrity constraints
+-  Use cursors when set-based operations work
 
----
 
-## 🌟 Conclusion
+# Conclusion
 
 This architecture balances **academic rigor** with **practical applicability**, demonstrating:
 
@@ -643,16 +626,14 @@ This architecture balances **academic rigor** with **practical applicability**, 
 
 The design is **production-ready** yet **approachable for learning**, making it ideal for portfolio demonstration, interview preparation, and skill development.
 
----
 
-## 🔗 Related Documentation
+#  Related Documentation
 
 - [README.md](README.md) - Project overview & quick start
 - [DATABASE_SCHEMA.md](DATABASE_SCHEMA.md) - Detailed schema specs
 - [QUERIES_GUIDE.md](QUERIES_GUIDE.md) - Query documentation
 - [SAMPLE_OUTPUTS.md](SAMPLE_OUTPUTS.md) - Example results
 
----
 
 **Version:** 1.0  
 **Last Updated:** 2025-12-13  
