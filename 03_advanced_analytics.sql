@@ -1,76 +1,53 @@
 -- ============================================================================
--- ADVANCED SQL ANALYTICS QUERIES FOR E-COMMERCE CASE STUDY
+-- Advanced Analytics Queries – E-Commerce SQL Case Study
 -- ============================================================================
 -- File: 03_advanced_analytics.sql
--- Database: SQL Server / PostgreSQL (uses ANSI SQL with some dialect-specific functions)
--- 
--- SYNTAX NOTE: This file demonstrates advanced analytical patterns using SQL Server
--- and PostgreSQL syntax (DATEDIFF, DATEADD, DATEPART for SQL Server; some queries
--- use PostgreSQL patterns). To adapt for other databases:
---   - SQL Server DATEADD() → PostgreSQL date + INTERVAL
---   - SQL Server DATEDIFF() → PostgreSQL date subtraction
---   - Check date/time function compatibility
 --
--- The queries showcase advanced SQL techniques (window functions, CTEs, cohort
--- analysis) that are conceptually universal across modern SQL databases.
+-- This file is a “playbook” of more advanced analytics patterns you’ll see in
+-- real analyst work: window functions, CTE pipelines, growth calculations,
+-- cohort retention, and a few deeper cuts like basket analysis.
 --
--- This file contains advanced SQL analytics queries including:
--- - Window Functions
--- - Common Table Expressions (CTEs)
--- - Product Performance Analysis
--- - Customer Segmentation
--- - Order-to-Order Growth Analysis
--- - Top Products Within Categories
--- - Month-over-Month Growth Analysis
--- - Customer Cohort Analysis
--- - Seasonal Trend Analysis
+-- Dialect note:
+-- Some queries use SQL Server date functions (DATEDIFF/DATEADD/DATEPART/GETDATE),
+-- while other parts follow patterns commonly used in PostgreSQL.
+-- The ideas are portable; the date/time syntax is the main thing you’d swap
+-- when moving between database engines.
+--
+-- What’s in here:
+-- - Product and customer ranking (RANK/DENSE_RANK/ROW_NUMBER)
+-- - Running totals and distribution checks (cumulative/percentiles/tiles)
+-- - Product performance summaries and trend comparisons
+-- - RFM-style customer segmentation + CLV-style value banding
+-- - Order-to-order progression and growth trajectories
+-- - Monthly/Yoy/MoM growth patterns
+-- - Cohort retention and repeat behavior by cohort
+-- - Seasonality patterns and weekday vs weekend behavior
+-- - Simple basket analysis (“frequently bought together”)
+-- - KPI / scorecard style outputs for quick executive views
 -- ============================================================================
 
 
 -- ============================================================================
--- 1. WINDOW FUNCTIONS - SALES RANKINGS AND CUMULATIVE ANALYSIS
+-- 1) WINDOW FUNCTIONS – RANKING + CUMULATIVE ANALYSIS
 -- ============================================================================
--- BUSINESS CONTEXT:
--- Demonstrate advanced window function patterns for ranking products,
--- calculating running totals, and analyzing customer purchase sequences.
--- These techniques enable sophisticated analytics without complex subqueries.
---
--- SQL TECHNIQUES DEMONSTRATED:
--- - RANK() vs DENSE_RANK() vs ROW_NUMBER() (different ranking behaviors)
--- - LAG() and LEAD() for accessing adjacent rows
--- - SUM() OVER() for running totals
--- - PARTITION BY for windowing within groups
--- - Multiple window functions in single query
---
--- BUSINESS APPLICATIONS:
--- - Product performance rankings within categories
--- - Identifying top performers and long-tail products
--- - Calculating cumulative sales contribution
--- - Understanding 80/20 rule (Pareto principle) in practice
+-- Why this section exists:
+-- Window functions are one of the biggest “step-ups” in SQL because they let you
+-- do ranking, comparisons, and running totals without awkward subqueries.
+-- The examples below are intentionally practical: product ranks, customer order
+-- sequences, and distribution slices.
 
--- Query 1.1: Product Sales Ranking with Running Total
--- BUSINESS VALUE: Identify which products drive revenue and understand
--- cumulative sales distribution (e.g., "top 10 products = 60% of sales")
+-- Query 1.1: Product Sales Ranking + Running Total
+-- What this answers:
+-- - Which products drive the most revenue?
+-- - How concentrated are sales (Pareto / 80-20 style)?
 SELECT 
     p.product_id,
     p.product_name,
     c.category_name,
-    -- Total revenue per product
     SUM(oi.quantity * oi.unit_price) AS total_sales,
-    -- Rank within category: 1 = best in category
-    -- TECHNIQUE: PARTITION BY creates separate rankings per category
-    -- RANK() allows ties (two products can share rank 1)
     RANK() OVER (PARTITION BY c.category_id ORDER BY SUM(oi.quantity * oi.unit_price) DESC) AS sales_rank_in_category,
-    -- Overall rank across all products
-    -- TECHNIQUE: DENSE_RANK() like RANK() but no gaps in numbering
-    -- (if two products tie at 1, next is 2, not 3)
     DENSE_RANK() OVER (ORDER BY SUM(oi.quantity * oi.unit_price) DESC) AS overall_sales_rank,
-    -- Running total of sales (cumulative revenue)
-    -- TECHNIQUE: Window function SUM() calculates running total
-    -- Useful for identifying "top X products that generate Y% of revenue"
     SUM(SUM(oi.quantity * oi.unit_price)) OVER (ORDER BY SUM(oi.quantity * oi.unit_price) DESC) AS cumulative_sales,
-    -- Sequential number within category (always unique)
-    -- TECHNIQUE: ROW_NUMBER() never ties, assigns unique sequential numbers
     ROW_NUMBER() OVER (PARTITION BY c.category_id ORDER BY SUM(oi.quantity * oi.unit_price) DESC) AS row_num
 FROM products p
 INNER JOIN categories c ON p.category_id = c.category_id
@@ -79,36 +56,27 @@ GROUP BY p.product_id, p.product_name, c.category_id, c.category_name
 ORDER BY overall_sales_rank;
 
 
--- Query 1.2: Customer Purchase Frequency with Window Functions
--- BUSINESS VALUE: Understand customer ordering patterns, identify purchase
--- velocity trends, and determine optimal re-engagement timing
+-- Query 1.2: Customer Purchase Timing + Frequency (Window-based)
+-- What this answers:
+-- - How quickly do customers come back for a second/third order?
+-- - Who is ordering frequently vs drifting away?
 SELECT 
     customer_id,
     order_id,
     order_date,
     order_total,
-    -- Date of previous order for this customer
-    -- TECHNIQUE: LAG() accesses previous row within partition
-    -- PARTITION BY customer_id creates separate windows per customer
     LAG(order_date) OVER (PARTITION BY customer_id ORDER BY order_date) AS previous_order_date,
-    -- Days between this order and previous order
-    -- BUSINESS LOGIC: Short intervals = high engagement, long intervals = risk
     DATEDIFF(DAY, LAG(order_date) OVER (PARTITION BY customer_id ORDER BY order_date), order_date) AS days_since_last_order,
-    -- Total orders for this customer (same value on all rows for a customer)
-    -- TECHNIQUE: COUNT(*) OVER with PARTITION BY but no ORDER BY
     COUNT(*) OVER (PARTITION BY customer_id) AS total_customer_orders,
-    -- Sequential order number for this customer (1st, 2nd, 3rd order, etc.)
-    -- BUSINESS LOGIC: Behavior often differs between 1st, 2nd, 3rd+ purchases
     ROW_NUMBER() OVER (PARTITION BY customer_id ORDER BY order_date) AS order_sequence,
-    -- Date of next order (NULL if this is the last order)
-    -- TECHNIQUE: LEAD() accesses next row within partition
     LEAD(order_date) OVER (PARTITION BY customer_id ORDER BY order_date) AS next_order_date
 FROM orders
 ORDER BY customer_id, order_date;
 
 
--- Query 1.3: Percentile Analysis - Order Value Distribution
--- Determines percentile rank and quartile distribution of order values
+-- Query 1.3: Order Value Distribution (Percentiles / Quartiles / Deciles)
+-- What this answers:
+-- Where does each order sit relative to the rest (e.g., top 10%, top 25%)?
 SELECT 
     order_id,
     order_total,
@@ -123,11 +91,12 @@ ORDER BY order_total DESC;
 
 
 -- ============================================================================
--- 2. COMMON TABLE EXPRESSIONS (CTEs) - PRODUCT PERFORMANCE ANALYSIS
+-- 2) CTE PIPELINES – PRODUCT PERFORMANCE SUMMARIES
 -- ============================================================================
+-- These are structured like “mini data pipelines”:
+-- step 1 = build the base table, step 2 = enrich/rank it, step 3 = output.
 
--- Query 2.1: Comprehensive Product Performance Report
--- Analyzes sales, profit margins, units sold, and trends
+-- Query 2.1: Product Performance Report (Revenue, Units, Orders, Time Range)
 WITH product_sales AS (
     SELECT 
         p.product_id,
@@ -169,8 +138,8 @@ FROM product_rankings
 ORDER BY overall_revenue_rank;
 
 
--- Query 2.2: Product Performance with Trend Analysis
--- Compares current period vs previous period performance
+-- Query 2.2: Trend Check – Current Month vs Previous Month
+-- Helpful for spotting products that are accelerating or slowing down.
 WITH current_period AS (
     SELECT 
         p.product_id,
@@ -221,41 +190,12 @@ ORDER BY revenue_change DESC;
 
 
 -- ============================================================================
--- 3. CUSTOMER SEGMENTATION ANALYSIS
+-- 3) CUSTOMER SEGMENTATION (RFM + CLV STYLE)
 -- ============================================================================
--- BUSINESS CONTEXT:
--- Segment customers using RFM (Recency, Frequency, Monetary) methodology,
--- an industry-standard approach for customer value analysis. This enables
--- targeted marketing, personalized engagement, and resource optimization.
---
--- SQL TECHNIQUES DEMONSTRATED:
--- - Multiple CTEs: customer_metrics, rfm_scoring (staged calculations)
--- - NTILE() for quintile/percentile scoring (divides into equal groups)
--- - Complex CASE statements for business rule segmentation
--- - DATEDIFF() for temporal analysis
---
--- BUSINESS APPLICATIONS:
--- - Identify "Champions" (best customers) for VIP treatment
--- - Find "At Risk" customers for retention campaigns
--- - Segment "Can't Lose Them" (high value, declining) for win-back
--- - Target "Potential Loyalists" for engagement programs
---
--- RFM SCORING METHODOLOGY:
--- Each customer scored 1-5 on three dimensions:
--- - Recency: How recently did they purchase? (5 = most recent)
--- - Frequency: How often do they purchase? (5 = most frequent)
--- - Monetary: How much do they spend? (5 = highest spend)
---
--- SEGMENT DEFINITIONS:
--- - Champions: High R, F, M (best customers)
--- - Loyal: High F, M; medium-high R (consistent buyers)
--- - At Risk: Low R; previously medium-high F, M (declining engagement)
--- - Can't Lose: Low R; high M (valuable but inactive)
--- - Potential Loyalists: High R; medium F, M (recent, growing)
+-- This is a common real-world pattern: turn raw transactions into customer-level
+-- metrics, score them into bands, and use those bands to guide marketing/retention.
 
--- Query 3.1: RFM Segmentation (Recency, Frequency, Monetary)
--- BUSINESS VALUE: Prioritize marketing spend and retention efforts based on
--- customer value and engagement level
+-- Query 3.1: RFM Segmentation
 WITH customer_metrics AS (
     SELECT 
         c.customer_id,
@@ -300,8 +240,7 @@ FROM rfm_scoring
 ORDER BY monetary_value DESC;
 
 
--- Query 3.2: Customer Lifetime Value (CLV) Analysis
--- Calculates predicted lifetime value and segments by value
+-- Query 3.2: CLV-Style Value Bands (3-year proxy)
 WITH customer_purchases AS (
     SELECT 
         c.customer_id,
@@ -347,11 +286,12 @@ ORDER BY predicted_3yr_value DESC;
 
 
 -- ============================================================================
--- 4. ORDER-TO-ORDER GROWTH ANALYSIS
+-- 4) ORDER-TO-ORDER GROWTH (CUSTOMER TRAJECTORIES)
 -- ============================================================================
+-- Useful when you want to see how customer behavior changes from order #1 to #2,
+-- or whether spending grows over time.
 
--- Query 4.1: Customer Purchase Pattern and Order Growth
--- Tracks individual customer ordering patterns over time
+-- Query 4.1: Customer Order Sequence + Growth vs Previous Order
 WITH customer_order_sequence AS (
     SELECT 
         c.customer_id,
@@ -385,8 +325,7 @@ WHERE order_number <= 10
 ORDER BY customer_id, order_number;
 
 
--- Query 4.2: Order Value Progression - Average Growth Trajectory
--- Analyzes average order value progression by order sequence
+-- Query 4.2: Average Order Value Progression by Sequence #
 WITH order_sequence_analysis AS (
     SELECT 
         ROW_NUMBER() OVER (PARTITION BY c.customer_id ORDER BY o.order_date) AS order_sequence,
@@ -411,11 +350,11 @@ ORDER BY order_sequence;
 
 
 -- ============================================================================
--- 5. TOP PRODUCTS WITHIN CATEGORIES
+-- 5) TOP PRODUCTS WITHIN CATEGORIES
 -- ============================================================================
+-- This is a common reporting need: "show me top N items per category".
 
 -- Query 5.1: Top 3 Products per Category by Revenue
--- Uses window functions to rank and filter top performers
 WITH category_product_ranking AS (
     SELECT 
         c.category_id,
@@ -446,8 +385,7 @@ WHERE revenue_rank <= 3
 ORDER BY category_id, revenue_rank;
 
 
--- Query 5.2: Product Performance Comparison Within Categories
--- Compares each product against category average
+-- Query 5.2: Product vs Category Average (Quick Benchmarking)
 WITH category_stats AS (
     SELECT 
         c.category_id,
@@ -492,11 +430,11 @@ ORDER BY ps.category_id, ps.product_revenue DESC;
 
 
 -- ============================================================================
--- 6. MONTH-OVER-MONTH (MoM) GROWTH ANALYSIS
+-- 6) MONTH-OVER-MONTH / YEAR-OVER-YEAR GROWTH
 -- ============================================================================
+-- The two outputs below are useful for “how are we trending?” questions.
 
--- Query 6.1: Monthly Sales Trend with YoY Comparison
--- Compares current year performance against previous year
+-- Query 6.1: Monthly Totals + YoY Comparison
 WITH monthly_sales AS (
     SELECT 
         DATEPART(YEAR, o.order_date) AS year,
@@ -538,8 +476,7 @@ FROM monthly_with_lag
 ORDER BY year DESC, month DESC;
 
 
--- Query 6.2: MoM Growth Rate with Trend Analysis
--- Calculates month-over-month changes and trends
+-- Query 6.2: MoM Growth (Monthly rollup from daily)
 WITH daily_sales AS (
     SELECT 
         CAST(o.order_date AS DATE) AS order_date,
@@ -591,11 +528,12 @@ ORDER BY year DESC, month DESC;
 
 
 -- ============================================================================
--- 7. CUSTOMER COHORT ANALYSIS
+-- 7) COHORT RETENTION
 -- ============================================================================
+-- Cohorts answer: “When someone first buys in month X, how likely are they to
+-- come back in month X+1, X+2, etc.?”
 
--- Query 7.1: Cohort Analysis - Customer Retention by Signup Month
--- Tracks cohort behavior over subsequent months
+-- Query 7.1: Cohort Retention by First Purchase Month
 WITH customer_first_purchase AS (
     SELECT 
         c.customer_id,
@@ -648,8 +586,7 @@ LEFT JOIN cohort_summary co ON cs.cohort_month = co.cohort_month
 ORDER BY cs.cohort_month DESC, co.months_since_cohort;
 
 
--- Query 7.2: Repeat Purchase Rate by Cohort
--- Measures which cohorts have strongest repeat purchase behavior
+-- Query 7.2: Repeat Rate by Cohort
 WITH customer_cohorts AS (
     SELECT 
         c.customer_id,
@@ -674,11 +611,12 @@ ORDER BY cohort_month DESC;
 
 
 -- ============================================================================
--- 8. SEASONAL TREND ANALYSIS
+-- 8) SEASONALITY + DAY-OF-WEEK PATTERNS
 -- ============================================================================
+-- These are lightweight “behavior” views: which months/quarters are strong,
+-- and whether weekends behave differently from weekdays.
 
--- Query 8.1: Seasonal Patterns by Quarter and Month
--- Identifies seasonal trends and patterns
+-- Query 8.1: Seasonal Patterns by Quarter/Month
 WITH quarterly_sales AS (
     SELECT 
         DATEPART(YEAR, o.order_date) AS year,
@@ -719,8 +657,7 @@ LEFT JOIN season_averages sa ON qs.quarter = sa.quarter AND qs.month = sa.month
 ORDER BY year DESC, quarter DESC, month DESC;
 
 
--- Query 8.2: Day of Week and Weekend vs Weekday Analysis
--- Analyzes purchasing patterns by day of week
+-- Query 8.2: Weekday vs Weekend Patterns
 WITH daily_patterns AS (
     SELECT 
         DATEPART(WEEKDAY, o.order_date) AS day_of_week,
@@ -767,8 +704,7 @@ FROM day_aggregates
 ORDER BY day_of_week;
 
 
--- Query 8.3: Year-over-Year Seasonal Comparison
--- Compares seasonal performance across years
+-- Query 8.3: Year-over-Year Seasonality by Month
 WITH seasonal_data AS (
     SELECT 
         DATEPART(YEAR, o.order_date) AS year,
@@ -808,11 +744,12 @@ ORDER BY month;
 
 
 -- ============================================================================
--- 9. ADVANCED ANALYTICS - PRODUCT BUNDLE AND CROSS-SELL ANALYSIS
+-- 9) CROSS-SELL / BUNDLE SIGNALS (BASIC MARKET BASKET)
 -- ============================================================================
+-- This is a simple “what gets bought together” pattern. It’s not a full
+-- recommendation engine, but it’s a useful starting point.
 
--- Query 9.1: Frequently Purchased Together (Market Basket Analysis)
--- Identifies product combinations frequently bought together
+-- Query 9.1: Frequently Purchased Together
 WITH order_products AS (
     SELECT 
         o.order_id,
@@ -840,8 +777,7 @@ HAVING COUNT(DISTINCT order_id) >= 3
 ORDER BY times_purchased_together DESC;
 
 
--- Query 9.2: Customer Segment Performance Comparison
--- Compares performance across different customer segments
+-- Query 9.2: Segment Performance Comparison
 WITH customer_spending AS (
     SELECT 
         c.customer_id,
@@ -885,11 +821,11 @@ ORDER BY customer_count DESC;
 
 
 -- ============================================================================
--- 10. PERFORMANCE BENCHMARKING
+-- 10) KPI / SCORECARD OUTPUTS
 -- ============================================================================
+-- These are the kinds of “one query” outputs you might feed into a dashboard.
 
--- Query 10.1: Overall Business KPI Dashboard
--- High-level metrics for business performance monitoring
+-- Query 10.1: High-Level KPIs
 SELECT 
     COUNT(DISTINCT c.customer_id) AS total_customers,
     COUNT(DISTINCT o.order_id) AS total_orders,
@@ -909,8 +845,7 @@ LEFT JOIN products p ON oi.product_id = p.product_id
 LEFT JOIN categories cat ON p.category_id = cat.category_id;
 
 
--- Query 10.2: Category Performance Scorecard
--- Evaluates each category across multiple dimensions
+-- Query 10.2: Category Scorecard (Multi-metric benchmarking)
 WITH category_metrics AS (
     SELECT 
         c.category_id,
@@ -959,5 +894,5 @@ ORDER BY overall_performance_score ASC;
 
 
 -- ============================================================================
--- END OF ADVANCED ANALYTICS QUERIES
+-- End of advanced analytics queries
 -- ============================================================================
