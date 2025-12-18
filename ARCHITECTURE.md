@@ -36,14 +36,15 @@ What this demonstrates:
 **Purpose:** reliable, persistent storage with transactional consistency.
 
 ┌─────────────────────────────────────────────────┐
-│ DATABASE MANAGEMENT SYSTEM │
-│ │
-│ MySQL 8.0+ / PostgreSQL 12+ │
-│ - ACID transactions │
-│ - Referential integrity │
-│ - Index management │
-│ - Query optimization │
+│           DATABASE MANAGEMENT SYSTEM            │
+│                                                 │
+│   MySQL 8.0+ / PostgreSQL 12+                   │
+│   - ACID transactions                           │
+│   - Referential integrity                       │
+│   - Index management                            │
+│   - Query optimization                          │
 └─────────────────────────────────────────────────┘
+
 
 
 **Key components**
@@ -63,15 +64,16 @@ What this demonstrates:
 **Purpose:** represent business entities in a way that supports both correctness and analysis.
 
 ┌─────────────────────────────────────────────────┐
-│ DATA MODEL LAYER │
-│ │
-│ ┌─────────────┐ ┌─────────────┐ │
-│ │ Dimension │ │ Fact │ │
-│ │ Tables │◄────────┤ Tables │ │
-│ └─────────────┘ └─────────────┘ │
-│ - Customers - Orders │
-│ - Products - Order_Details │
+│              DATA MODEL LAYER                   │
+│                                                 │
+│   ┌─────────────┐         ┌─────────────┐      │
+│   │ Dimension   │◄────────┤    Fact     │      │
+│   │   Tables    │         │   Tables    │      │
+│   └─────────────┘         └─────────────┘      │
+│    Customers                Orders              │
+│    Products                 Order_Details       │
 └─────────────────────────────────────────────────┘
+
 
 
 **Design pattern:** hybrid star-style analytics on top of a normalized base.
@@ -95,18 +97,19 @@ What this demonstrates:
 **Purpose:** turn raw transactions into answers a business would care about.
 
 ┌─────────────────────────────────────────────────┐
-│ BUSINESS LOGIC │
-│ │
-│ ┌─────────────────┐ ┌─────────────────┐ │
-│ │ SQL Queries │ │ CTEs + Windows │ │
-│ └─────────────────┘ └─────────────────┘ │
-│ │
-│ Examples: │
-│ - RFM / churn risk │
-│ - Cohort retention │
-│ - Time-series trends │
-│ - Product performance │
+│               BUSINESS LOGIC                    │
+│                                                 │
+│   ┌─────────────────┐   ┌─────────────────┐   │
+│   │   SQL Queries   │   │ CTEs & Windows   │   │
+│   │  (Analytics)    │   │  Functions       │   │
+│   └─────────────────┘   └─────────────────┘   │
+│                                                 │
+│   - RFM / churn analysis                        │
+│   - Cohort retention                            │
+│   - Time-series trends                          │
+│   - Product performance                         │
 └─────────────────────────────────────────────────┘
+
 
 
 **How queries are organized**
@@ -123,14 +126,15 @@ What this demonstrates:
 **Purpose:** make the results understandable and useful to someone who isn’t reading SQL.
 
 ┌─────────────────────────────────────────────────┐
-│ PRESENTATION │
-│ │
-│ Query Results → Documentation → Insights │
-│ │
-│ - SAMPLE_OUTPUTS.md │
-│ - QUERIES_GUIDE.md │
-│ - CASE_STUDY_REPORT.md │
+│               PRESENTATION                      │
+│                                                 │
+│   Query Results → Documentation → Insights      │
+│                                                 │
+│   - SAMPLE_OUTPUTS.md                           │
+│   - QUERIES_GUIDE.md                            │
+│   - CASE_STUDY_REPORT.md                        │
 └─────────────────────────────────────────────────┘
+
 
 
 The goal here is “stakeholder readability”: what was asked, how it was answered, and what the results suggest.
@@ -140,18 +144,19 @@ The goal here is “stakeholder readability”: what was asked, how it was answe
 
 ### End-to-end journey
 
-┌──────────────┐ ┌──────────────┐ ┌──────────────┐
-│ CSV Files │──────►│ Database │──────►│ SQL Queries │
-└──────────────┘ └──────────────┘ └──────────────┘
-Raw input Structured Analytics output
-storage + rules
-│
-▼
-┌──────────────┐
-│ Constraints │
-│ Indexes │
-│ Relations │
-└──────────────┘
+┌──────────────┐       ┌──────────────┐       ┌──────────────┐
+│   CSV Files  │──────►│   Database   │──────►│  SQL Queries │
+└──────────────┘       └──────────────┘       └──────────────┘
+   Raw input              Structured              Analytics
+                         storage
+                            │
+                            ▼
+                    ┌──────────────┐
+                    │ Constraints  │
+                    │ Indexes      │
+                    │ Relations    │
+                    └──────────────┘
+
 
 ### What happens at each step
 
@@ -304,6 +309,7 @@ This pattern is especially useful for:
 │  CUSTOMER    │      │   PRODUCT    │   │ OPERATIONAL  │
 │   METRICS    │      │   METRICS    │   │   METRICS    │
 └──────────────┘      └──────────────┘   └──────────────┘
+
 
 ### Scalability considerations
 ## Current state (MVP dataset)
