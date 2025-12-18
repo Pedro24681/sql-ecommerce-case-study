@@ -35,15 +35,17 @@ What this demonstrates:
 
 **Purpose:** reliable, persistent storage with transactional consistency.
 
-┌─────────────────────────────────────────────────┐
-│           DATABASE MANAGEMENT SYSTEM            │
-│                                                 │
-│   MySQL 8.0+ / PostgreSQL 12+                   │
-│   - ACID transactions                           │
-│   - Referential integrity                       │
-│   - Index management                            │
-│   - Query optimization                          │
-└─────────────────────────────────────────────────┘
+flowchart TB
+    DB[(Database Management System)]
+    DB --> A[ACID Transactions]
+    DB --> B[Referential Integrity]
+    DB --> C[Index Management]
+    DB --> D[Query Optimization]
+
+    DB:::db
+
+    classDef db fill:#f4f4f4,stroke:#333,stroke-width:1px;
+
 
 
 
@@ -63,16 +65,16 @@ What this demonstrates:
 
 **Purpose:** represent business entities in a way that supports both correctness and analysis.
 
-┌─────────────────────────────────────────────────┐
-│              DATA MODEL LAYER                   │
-│                                                 │
-│   ┌─────────────┐         ┌─────────────┐      │
-│   │ Dimension   │◄────────┤    Fact     │      │
-│   │   Tables    │         │   Tables    │      │
-│   └─────────────┘         └─────────────┘      │
-│    Customers                Orders              │
-│    Products                 Order_Details       │
-└─────────────────────────────────────────────────┘
+flowchart LR
+    Customers[Customers<br/>(Dimension)]
+    Products[Products<br/>(Dimension)]
+    Orders[Orders<br/>(Fact)]
+    OrderDetails[Order Details<br/>(Fact)]
+
+    Customers --> Orders
+    Products --> OrderDetails
+    Orders --> OrderDetails
+
 
 
 
@@ -96,20 +98,13 @@ What this demonstrates:
 
 **Purpose:** turn raw transactions into answers a business would care about.
 
-┌─────────────────────────────────────────────────┐
-│               BUSINESS LOGIC                    │
-│                                                 │
-│   ┌─────────────────┐   ┌─────────────────┐   │
-│   │   SQL Queries   │   │ CTEs & Windows   │   │
-│   │  (Analytics)    │   │  Functions       │   │
-│   └─────────────────┘   └─────────────────┘   │
-│                                                 │
-│   - RFM / churn analysis                        │
-│   - Cohort retention                            │
-│   - Time-series trends                          │
-│   - Product performance                         │
-└─────────────────────────────────────────────────┘
 
+flowchart TB
+    SQL[SQL Queries]
+    CTEs[CTEs & Window Functions]
+    Insights[Business Insights]
+
+    SQL --> CTEs --> Insights
 
 
 **How queries are organized**
@@ -125,15 +120,12 @@ What this demonstrates:
 
 **Purpose:** make the results understandable and useful to someone who isn’t reading SQL.
 
-┌─────────────────────────────────────────────────┐
-│               PRESENTATION                      │
-│                                                 │
-│   Query Results → Documentation → Insights      │
-│                                                 │
-│   - SAMPLE_OUTPUTS.md                           │
-│   - QUERIES_GUIDE.md                            │
-│   - CASE_STUDY_REPORT.md                        │
-└─────────────────────────────────────────────────┘
+flowchart TB
+    Results[Query Results]
+    Docs[Documentation]
+    Insights[Stakeholder Insights]
+
+    Results --> Docs --> Insights
 
 
 
@@ -144,18 +136,14 @@ The goal here is “stakeholder readability”: what was asked, how it was answe
 
 ### End-to-end journey
 
-┌──────────────┐       ┌──────────────┐       ┌──────────────┐
-│   CSV Files  │──────►│   Database   │──────►│  SQL Queries │
-└──────────────┘       └──────────────┘       └──────────────┘
-   Raw input              Structured              Analytics
-                         storage
-                            │
-                            ▼
-                    ┌──────────────┐
-                    │ Constraints  │
-                    │ Indexes      │
-                    │ Relations    │
-                    └──────────────┘
+flowchart LR
+    CSV[CSV Files]
+    DB[Database Tables]
+    SQL[SQL Analytics]
+    Output[Insights & Reports]
+
+    CSV --> DB --> SQL --> Output
+
 
 
 ### What happens at each step
@@ -296,19 +284,16 @@ This pattern is especially useful for:
 
 ### KPI hierarchy
 
-┌─────────────────────────────────────────────────────┐
-│                TOP-LEVEL KPIs                       │
-│  - Total Revenue                                    │
-│  - Customer Lifetime Value                          │
-│  - Repeat Purchase Rate                             │
-└──────────────────┬──────────────────────────────────┘
-                   │
-       ┌───────────┴────────────┬──────────────────┐
-       ▼                        ▼                  ▼
-┌──────────────┐      ┌──────────────┐   ┌──────────────┐
-│  CUSTOMER    │      │   PRODUCT    │   │ OPERATIONAL  │
-│   METRICS    │      │   METRICS    │   │   METRICS    │
-└──────────────┘      └──────────────┘   └──────────────┘
+flowchart TB
+    KPI[Top-Level KPIs]
+    Cust[Customer Metrics]
+    Prod[Product Metrics]
+    Ops[Operational Metrics]
+
+    KPI --> Cust
+    KPI --> Prod
+    KPI --> Ops
+
 
 
 ### Scalability considerations
