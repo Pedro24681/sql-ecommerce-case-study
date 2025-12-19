@@ -12,12 +12,9 @@ I built this project to get hands on experience with real world e-commerce data 
 The whole process involved designing the database from scratch, writing queries to dig into the data, and using some more advanced SQL techniques like window functions and CTEs to pull out deeper insights.  It's been a great way to learn how to think about data problems. 
 
 
-
-
 # Project Overview
 
-This repository showcases advanced SQL analytics applied to a realistic e-commerce database. It demonstrates proficiency in complex queries, window functions, CTEs, business intelligence, and translating data into actionable insights.
-
+This repo is basically my playground for advanced SQL.  It's built on a realistic e-commerce database that shows how to use window functions, CTEs, and multi-table joins to pull actual business insights from data.  Not theory—real analytics patterns that work. 
 
 
 # Prerequisites
@@ -230,6 +227,9 @@ Dive into `03_advanced_analytics.sql` for complex multi-CTE patterns and sophist
 
 While this is a personal portfolio project for me, suggestions and feedback are welcome
 
+# Contributing
+
+This is a personal project I built for learning, but if you spot something or have ideas, I'm always up for feedback.  Happy to talk through anything! 
 
 # License
 
