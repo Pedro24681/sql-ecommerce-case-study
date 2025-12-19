@@ -1,14 +1,11 @@
-# 📊 Sample Query Outputs
+# Sample Query Outputs
 
 ## Overview
 
-This document showcases **example outputs** from key queries in the E-Commerce Analytics Case Study. Each section includes sample result sets, interpretations, and actionable insights.
-
-> **Note:** Outputs shown are based on the sample dataset included in `setup.sql`. Actual results may vary with different data.
-
+This section walks through what you actually get when you run the queries.  I've included example outputs, what they tell you, and some practical next steps based on what the data shows.  It's meant to give you a real feel for what these queries are capable of pulling out.
 ---
 
-## 📋 Table of Contents
+## Table of Contents
 
 1. [Top-Selling Product Category](#1-top-selling-product-category)
 2. [Top Customers by Revenue](#2-top-customers-by-revenue)
@@ -46,10 +43,10 @@ Beauty        |            8 |               23 |        620.50 |               
 - **Beauty** is underperforming, suggesting potential for growth or discontinuation
 
 **Business Actions:**
-1. ✅ Increase Electronics inventory by 30%
-2. ✅ Bundle Accessories with Electronics for higher AOV
-3. ⚠️ Investigate Beauty category performance
-4. 📈 Expand Sports category product range
+1.  Increase Electronics inventory by 30%
+2.  Bundle Accessories with Electronics for higher AOV
+3.  Investigate Beauty category performance
+4.  Expand Sports category product range
 
 ---
 
@@ -195,10 +192,10 @@ Index = (Day Avg / Overall Avg) × 100
 - **Day-over-day volatility:** ±15% average
 
 **Operational Recommendations:**
-1. 📦 Increase weekend staffing by 30-40%
-2. 📧 Schedule marketing emails for Thursday mornings
-3. 💰 Run flash sales on low-activity days (Tue-Wed)
-4. 📊 Monitor for emerging patterns (holidays, events)
+1.  Increase weekend staffing by 30-40%
+2.  Schedule marketing emails for Thursday mornings
+3.  Run flash sales on low-activity days (Tue-Wed)
+4.  Monitor for emerging patterns (holidays, events)
 
 ---
 
@@ -420,10 +417,10 @@ Avg         |             72.9% |             36.5% |              22.7%
 - **Long-term:** ~18-25% of customers become long-term loyalists
 
 **Improvement Opportunities:**
-1. 🎯 **Month 1:** Welcome series, onboarding guides, first repeat purchase incentive
-2. 🎯 **Month 3:** Check-in email, satisfaction survey, personalized recommendations
-3. 🎯 **Month 6:** Re-engagement campaign for dormant customers
-4. 🎯 **Month 12:** Anniversary rewards, exclusive offers for loyalists
+1.  **Month 1:** Welcome series, onboarding guides, first repeat purchase incentive
+2.  **Month 3:** Check-in email, satisfaction survey, personalized recommendations
+3.  **Month 6:** Re-engagement campaign for dormant customers
+4.  **Month 12:** Anniversary rewards, exclusive offers for loyalists
 
 ---
 
@@ -559,11 +556,11 @@ Low Day Revenue:         $159.96
 ```
 Metric                  | This Business | Industry Avg | Status
 ------------------------+---------------+--------------+--------
-Avg Order Value         |    $2,381.22  |    $1,850    | ✅ +28%
-Repeat Purchase Rate    |        66.7%  |        45%   | ✅ +48%
-Customer Retention      |        73.3%  |        60%   | ✅ +22%
-Revenue per Customer    |    $3,968.70  |    $2,500    | ✅ +59%
-Orders per Customer     |         1.67  |         2.1  | ⚠️ -20%
+Avg Order Value         |    $2,381.22  |    $1,850    |  +28%
+Repeat Purchase Rate    |        66.7%  |        45%   |  +48%
+Customer Retention      |        73.3%  |        60%   |  +22%
+Revenue per Customer    |    $3,968.70  |    $2,500    |  +59%
+Orders per Customer     |         1.67  |         2.1  |  -20%
 ```
 
 **Performance Scorecard:**
@@ -581,7 +578,7 @@ Overall Score   |  8.2  |   A-
 
 ---
 
-## 📈 Key Insights Summary
+##  Key Insights Summary
 
 ### Top 5 Business Findings
 
@@ -612,26 +609,26 @@ Overall Score   |  8.2  |   A-
 
 ---
 
-## 🎯 Next Steps & Recommendations
+##  Next Steps & Recommendations
 
 ### Immediate Actions (0-30 days)
-1. ✅ Launch win-back campaign for Critical Risk customers
-2. ✅ Implement weekend staffing increase
-3. ✅ Create VIP customer program for top 10%
+1.  Launch win-back campaign for Critical Risk customers
+2.  Implement weekend staffing increase
+3.  Create VIP customer program for top 10%
 
 ### Short-term Initiatives (1-3 months)
-1. 📊 Deploy real-time dashboard for key metrics
-2. 📧 Automate Month-1 retention email series
-3. 🛒 Optimize product recommendations (cross-sell)
+1.  Deploy real-time dashboard for key metrics
+2.  Automate Month-1 retention email series
+3.  Optimize product recommendations (cross-sell)
 
 ### Long-term Strategy (3-12 months)
-1. 📈 Scale operations for Q4 peak season
-2. 🎯 Expand product catalog in high-margin categories
-3. 🔄 Implement predictive churn model (ML-based)
+1.  Scale operations for Q4 peak season
+2.  Expand product catalog in high-margin categories
+3.  Implement predictive churn model (ML-based)
 
 ---
 
-## 🔗 Related Documentation
+##  Related Documentation
 
 - [README.md](README.md) - Project overview
 - [QUERIES_GUIDE.md](QUERIES_GUIDE.md) - Detailed query explanations
@@ -641,6 +638,6 @@ Overall Score   |  8.2  |   A-
 ---
 
 **Version:** 1.0  
-**Last Updated:** 2025-12-13  
+**Last Updated:** 2025-12-19  
 **Author:** Pedro24681  
 **Data Source:** ecommerce_analytics database (sample data)
