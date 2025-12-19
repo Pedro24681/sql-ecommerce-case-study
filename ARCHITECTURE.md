@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document explains how the E-Commerce SQL Case Study is structured from a “systems + analytics” point of view. The goal isn’t to pretend this is a full production platform—it’s to show that the project is designed intentionally: the schema matches business reality, the queries scale cleanly, and the analysis patterns are reusable.
+This document explains how the E-Commerce SQL Case Study is structured from a “systems + analytics” point of view. The goal isn’t to pretend this is a full production platform, it’s to show that the project is designed intentionally: the schema matches business reality, the queries scale cleanly, and the analysis patterns are reusable.
 
 What this demonstrates:
 - Data modeling decisions (normalized core + analytics-friendly joins)
@@ -423,7 +423,13 @@ sql-ecommerce-case-study/
 
 ### Conclusion
 
-This architecture is intentionally designed to balance clarity and realism. It shows how transactional data can be modeled, queried, and analyzed using patterns that scale beyond toy examples, while remaining easy to understand and review.
+This architecture is intentionally designed to balance clarity and realism. It shows how transactional data can be modeled, queried, and analyzed using patterns that scale beyond toy examples, while remaining easy to understand and modify for learning purposes. 
+
+The structure reflects how a real analyst would approach:
+
+- schema design
+- analytical SQL development  
+- documentation and communication of results
 
 The structure reflects how a real analyst would approach:
 
