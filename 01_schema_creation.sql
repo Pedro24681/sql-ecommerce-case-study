@@ -1,5 +1,5 @@
--- E-Commerce Database Schema
--- Case Study: E-Commerce Sales & Customer Analytics
+-- Database schema for the e-commerce case study
+-- Setting up 4 tables: Customers, Products, Orders, and Order_Details
 
 -- Create Customers Table
 CREATE TABLE Customers (
