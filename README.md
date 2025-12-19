@@ -1,10 +1,3 @@
-# E-Commerce SQL Analytics Case Study
-
-[![SQL](https://img.shields.io/badge/SQL-Advanced-blue.svg)](https://www.mysql.com/)
-[![Database](https://img.shields.io/badge/Database-MySQL%20%7C%20PostgreSQL-orange.svg)](https://www.postgresql.org/)
-[![Analytics](https://img.shields.io/badge/Analytics-Business%20Intelligence-green.svg)](https://github.com/Pedro24681/sql-ecommerce-case-study)
-[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-
 # SQL E-Commerce Analytics Case Study
 
 [![SQL](https://img.shields.io/badge/SQL-Advanced-blue.svg)](https://www.mysql.com/)
