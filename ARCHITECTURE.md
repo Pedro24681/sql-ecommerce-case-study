@@ -1,300 +1,218 @@
-# SQL E-Commerce Case Study - Architecture Documentation
+# SQL E-Commerce Case Study - Architecture
 
-## Overview
-This document describes the architecture and data flow of the SQL E-Commerce Case Study project.
+## System Overview
 
-## System Architecture
+The SQL E-Commerce Case Study demonstrates a complete database design for an e-commerce platform. This architecture documentation outlines the system components, data flow, and relationships.
 
-### High-Level Architecture Diagram
+## Database Schema
 
 ```mermaid
 graph TD
-    Client["Client/User"]
-    WebServer["Web Server"]
-    Database["SQL Database"]
-    Cache["Cache Layer"]
-    
-    Client -->|HTTP/HTTPS| WebServer
-    WebServer -->|Query| Database
-    WebServer -->|Cache Check| Cache
-    Cache -->|Cache Hit| WebServer
-    Database -->|Data| WebServer
-    WebServer -->|Response| Client
+    A[Users] --> B[Orders]
+    A --> C[Wishlists]
+    B --> D[Order Items]
+    D --> E[Products]
+    C --> E
+    E --> F[Categories]
+    E --> G[Suppliers]
+    B --> H[Payments]
+    B --> I[Shipments]
 ```
 
-## Database Architecture
+## User Authentication Flow
 
-### Database Schema Diagram
+```mermaid
+flowchart TD
+    A[User] -->|Login Request| B[Authentication Service]
+    B -->|Validate Credentials| C{Valid?}
+    C -->|Yes| D[Generate Token]
+    C -->|No| E[Return Error]
+    D --> F[Return Token]
+    F --> G[User Authenticated]
+    E --> H[Authentication Failed]
+```
+
+## Order Processing Workflow
+
+```mermaid
+flowchart TD
+    A[Customer] -->|Place Order| B[Shopping Cart]
+    B -->|Checkout| C[Inventory Check]
+    C -->|Available| D[Create Order]
+    C -->|Out of Stock| E[Notify Customer]
+    D --> F[Process Payment]
+    F -->|Success| G[Confirm Order]
+    F -->|Failed| H[Order Cancelled]
+    G --> I[Send Confirmation Email]
+    I --> J[Update Inventory]
+    J --> K[Order Complete]
+```
+
+## Payment Processing Flow
+
+```mermaid
+flowchart TD
+    A[Order] -->|Initiate Payment| B[Payment Gateway]
+    B -->|Process| C{Payment Status}
+    C -->|Approved| D[Record Payment]
+    C -->|Declined| E[Retry or Cancel]
+    D --> F[Update Order Status]
+    F --> G[Payment Complete]
+    E --> H[Notify Customer]
+```
+
+## Data Relationships
 
 ```mermaid
 graph LR
-    Users["Users Table"]
-    Products["Products Table"]
-    Orders["Orders Table"]
-    OrderItems["Order Items Table"]
-    Categories["Categories Table"]
-    Reviews["Reviews Table"]
-    
-    Users -->|User ID| Orders
-    Orders -->|Order ID| OrderItems
-    Products -->|Product ID| OrderItems
-    Products -->|Category ID| Categories
-    Users -->|User ID| Reviews
-    Products -->|Product ID| Reviews
+    Users -->|creates| Orders
+    Orders -->|contains| OrderItems
+    OrderItems -->|references| Products
+    Products -->|belongs to| Categories
+    Products -->|supplied by| Suppliers
+    Users -->|adds to| Wishlists
+    Wishlists -->|contains| Products
+    Orders -->|processed by| Payments
+    Orders -->|tracked by| Shipments
 ```
 
-## Data Flow Diagrams
-
-### User Registration Flow
+## API Endpoints Structure
 
 ```mermaid
-graph TD
-    Start["Start: User Registration"]
-    Input["User Inputs Data"]
-    Validate["Validate Input"]
-    ValidCheck{Valid?}
-    CheckEmail{Email Exists?}
-    HashPassword["Hash Password"]
-    Insert["Insert into Users Table"]
-    Success["Success Message"]
-    Error["Error Message"]
-    End["End"]
-    
-    Start --> Input
-    Input --> Validate
-    Validate --> ValidCheck
-    ValidCheck -->|No| Error
-    ValidCheck -->|Yes| CheckEmail
-    CheckEmail -->|Yes| Error
-    CheckEmail -->|No| HashPassword
-    HashPassword --> Insert
-    Insert --> Success
-    Error --> End
-    Success --> End
-```
-
-### Order Processing Flow
-
-```mermaid
-graph TD
-    Start["Start: Order Processing"]
-    UserAuth["Authenticate User"]
-    AuthCheck{Authenticated?}
-    SelectItems["Select Items from Cart"]
-    CalculateTotal["Calculate Total Price"]
-    ProcessPayment["Process Payment"]
-    PaymentCheck{Payment Successful?}
-    CreateOrder["Create Order Record"]
-    UpdateInventory["Update Inventory"]
-    SendConfirmation["Send Confirmation Email"]
-    Success["Order Confirmed"]
-    Failure["Order Rejected"]
-    End["End"]
-    
-    Start --> UserAuth
-    UserAuth --> AuthCheck
-    AuthCheck -->|No| Failure
-    AuthCheck -->|Yes| SelectItems
-    SelectItems --> CalculateTotal
-    CalculateTotal --> ProcessPayment
-    ProcessPayment --> PaymentCheck
-    PaymentCheck -->|No| Failure
-    PaymentCheck -->|Yes| CreateOrder
-    CreateOrder --> UpdateInventory
-    UpdateInventory --> SendConfirmation
-    SendConfirmation --> Success
-    Failure --> End
-    Success --> End
-```
-
-### Product Search Flow
-
-```mermaid
-graph TD
-    Start["Start: Product Search"]
-    Input["User Enters Search Term"]
-    QueryCache["Check Cache"]
-    CacheHit{Cache Hit?}
-    QueryDB["Query Database"]
-    Filter["Apply Filters & Sorting"]
-    Results["Display Results"]
-    Cache["Store in Cache"]
-    End["End"]
-    
-    Start --> Input
-    Input --> QueryCache
-    QueryCache --> CacheHit
-    CacheHit -->|Yes| Results
-    CacheHit -->|No| QueryDB
-    QueryDB --> Filter
-    Filter --> Cache
-    Cache --> Results
-    Results --> End
-```
-
-## API Endpoints Architecture
-
-### REST API Structure
-
-```mermaid
-graph LR
-    subgraph API["REST API Endpoints"]
-        Users["Users API"]
-        Products["Products API"]
-        Orders["Orders API"]
-        Reviews["Reviews API"]
-    end
-    
-    subgraph Methods["HTTP Methods"]
-        GET["GET"]
-        POST["POST"]
-        PUT["PUT"]
-        DELETE["DELETE"]
-    end
-    
-    API --> Methods
-```
-
-## Performance Optimization
-
-### Caching Strategy
-
-```mermaid
-graph TD
-    Request["Incoming Request"]
-    CheckCache["Check Cache"]
-    CacheValid{Cache Valid?}
-    ReturnCached["Return Cached Data"]
-    QueryDB["Query Database"]
-    ProcessData["Process Data"]
-    UpdateCache["Update Cache"]
-    ReturnData["Return Data"]
-    
-    Request --> CheckCache
-    CheckCache --> CacheValid
-    CacheValid -->|Yes| ReturnCached
-    CacheValid -->|No| QueryDB
-    QueryDB --> ProcessData
-    ProcessData --> UpdateCache
-    UpdateCache --> ReturnData
-    ReturnCached --> End["End"]
-    ReturnData --> End
-```
-
-### Database Indexing Strategy
-
-```mermaid
-graph TD
-    QueryAnalysis["Analyze Query Patterns"]
-    IdentifyBottlenecks["Identify Performance Bottlenecks"]
-    DesignIndexes["Design Index Strategy"]
-    PrimaryKey["Primary Key Indexes"]
-    ForeignKey["Foreign Key Indexes"]
-    SearchFields["Search Field Indexes"]
-    CompositeIndexes["Composite Indexes"]
-    Implement["Implement Indexes"]
-    Monitor["Monitor Performance"]
-    
-    QueryAnalysis --> IdentifyBottlenecks
-    IdentifyBottlenecks --> DesignIndexes
-    DesignIndexes --> PrimaryKey
-    DesignIndexes --> ForeignKey
-    DesignIndexes --> SearchFields
-    DesignIndexes --> CompositeIndexes
-    PrimaryKey --> Implement
-    ForeignKey --> Implement
-    SearchFields --> Implement
-    CompositeIndexes --> Implement
-    Implement --> Monitor
-```
-
-## Security Architecture
-
-### Authentication & Authorization Flow
-
-```mermaid
-graph TD
-    User["User Login"]
-    Input["Enter Credentials"]
-    Validate["Validate Credentials"]
-    Valid{Credentials Valid?}
-    CreateSession["Create Session"]
-    GenerateToken["Generate JWT Token"]
-    ReturnToken["Return Token to Client"]
-    ClientStore["Client Stores Token"]
-    UseToken["Use Token in Requests"]
-    ValidateToken["Validate Token on Server"]
-    TokenValid{Token Valid?}
-    AllowAccess["Allow Access"]
-    DenyAccess["Deny Access & Re-authenticate"]
-    
-    User --> Input
-    Input --> Validate
-    Validate --> Valid
-    Valid -->|No| DenyAccess
-    Valid -->|Yes| CreateSession
-    CreateSession --> GenerateToken
-    GenerateToken --> ReturnToken
-    ReturnToken --> ClientStore
-    ClientStore --> UseToken
-    UseToken --> ValidateToken
-    ValidateToken --> TokenValid
-    TokenValid -->|Yes| AllowAccess
-    TokenValid -->|No| DenyAccess
+flowchart TD
+    A[API Gateway] -->|/api/users| B[User Service]
+    A -->|/api/products| C[Product Service]
+    A -->|/api/orders| D[Order Service]
+    A -->|/api/payments| E[Payment Service]
+    B --> F[User Management]
+    C --> G[Catalog Management]
+    D --> H[Order Management]
+    E --> I[Payment Processing]
 ```
 
 ## Deployment Architecture
 
-### Application Deployment Flow
-
 ```mermaid
-graph TD
-    Code["Source Code"]
-    VCS["Version Control System"]
-    Build["Build Process"]
-    Test["Run Tests"]
-    TestPass{Tests Pass?}
-    Deploy["Deploy to Staging"]
-    StagingTest["Staging Tests"]
-    StagingPass{Staging OK?}
-    Production["Deploy to Production"]
-    Monitor["Monitor & Alert"]
-    
-    Code --> VCS
-    VCS --> Build
-    Build --> Test
-    Test --> TestPass
-    TestPass -->|No| Code
-    TestPass -->|Yes| Deploy
-    Deploy --> StagingTest
-    StagingTest --> StagingPass
-    StagingPass -->|No| Code
-    StagingPass -->|Yes| Production
-    Production --> Monitor
+graph LR
+    A[Client] -->|HTTPS| B[Load Balancer]
+    B --> C[API Server 1]
+    B --> D[API Server 2]
+    B --> E[API Server 3]
+    C --> F[Database Master]
+    D --> F
+    E --> F
+    F --> G[Database Replica]
+    C --> H[Cache Layer]
+    D --> H
+    E --> H
 ```
 
-## Technology Stack
+## Key Features
 
-### Backend Stack
-- **Language**: SQL/Database
-- **Web Framework**: Node.js/Express or Python/Flask
-- **Database**: MySQL/PostgreSQL
-- **Cache**: Redis
-- **Authentication**: JWT
+- **User Management**: Registration, authentication, and profile management
+- **Product Catalog**: Browsing, searching, and filtering products by categories
+- **Shopping Cart**: Add/remove items, view totals, and checkout
+- **Order Management**: Create, track, and manage customer orders
+- **Payment Processing**: Secure payment gateway integration
+- **Inventory Management**: Track stock levels and availability
+- **Wishlist**: Save favorite products for future purchase
+- **Shipment Tracking**: Monitor order delivery status
 
-### Frontend Stack
-- **Framework**: React/Vue/Angular
-- **Build Tool**: Webpack/Vite
-- **Package Manager**: npm/yarn
-- **Styling**: CSS/SCSS/Tailwind
+## Database Tables
 
-### DevOps Stack
-- **Version Control**: Git/GitHub
-- **CI/CD**: GitHub Actions/Jenkins
-- **Containerization**: Docker
-- **Orchestration**: Kubernetes (optional)
-- **Monitoring**: ELK Stack/Prometheus
+### Users
+- user_id (PK)
+- email (UNIQUE)
+- password_hash
+- first_name
+- last_name
+- created_at
+- updated_at
+
+### Products
+- product_id (PK)
+- name
+- description
+- price
+- stock_quantity
+- category_id (FK)
+- supplier_id (FK)
+- created_at
+- updated_at
+
+### Orders
+- order_id (PK)
+- user_id (FK)
+- order_date
+- total_amount
+- status
+- created_at
+- updated_at
+
+### Order Items
+- order_item_id (PK)
+- order_id (FK)
+- product_id (FK)
+- quantity
+- unit_price
+- created_at
+
+### Payments
+- payment_id (PK)
+- order_id (FK)
+- amount
+- payment_method
+- status
+- transaction_id
+- created_at
+
+### Shipments
+- shipment_id (PK)
+- order_id (FK)
+- carrier
+- tracking_number
+- status
+- estimated_delivery
+- created_at
+- updated_at
+
+### Categories
+- category_id (PK)
+- name
+- description
+- created_at
+
+### Suppliers
+- supplier_id (PK)
+- name
+- contact_email
+- phone
+- address
+- created_at
+
+### Wishlists
+- wishlist_id (PK)
+- user_id (FK)
+- product_id (FK)
+- created_at
+
+## Security Considerations
+
+- Password hashing using bcrypt or similar algorithms
+- JWT tokens for API authentication
+- HTTPS for all communications
+- SQL injection prevention through parameterized queries
+- Rate limiting on API endpoints
+- Regular security audits and updates
+
+## Performance Optimization
+
+- Database indexing on frequently queried columns
+- Caching layer for product catalogs and popular items
+- Load balancing across multiple API servers
+- Query optimization and stored procedures
+- Database replication for read operations
 
 ## Conclusion
 
-This architecture provides a scalable, secure, and performant foundation for the SQL E-Commerce Case Study project. All diagrams use proper Mermaid syntax for consistency and reliability.
+This architecture provides a scalable and secure foundation for an e-commerce platform with proper separation of concerns, robust data management, and comprehensive transaction handling.
