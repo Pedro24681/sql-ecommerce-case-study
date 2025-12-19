@@ -1,7 +1,6 @@
 # Database Schema
 
-This file explains the tables used in this SQL e-commerce project and how they relate to each other. I created or organized these tables so it’s easy to explore business questions with joins and aggregations.
-
+Here's how I structured the database.  I've got 4 main tables that all connect to each other, and I set them up to make it straightforward to answer business questions with joins and aggregations.  Nothing too complicated, but organized in a way that makes sense. 
 
 # Tables and Fields
 
