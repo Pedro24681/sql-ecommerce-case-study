@@ -4,15 +4,20 @@
 **Author:** Pedro24681  
 **Repository:** sql-ecommerce-case-study
 
+# SQL Learning Journey - E-Commerce Case Study
+
+**Date Created:** December 10, 2025  
+**Author:** Pedro24681  
+**Repository:** sql-ecommerce-case-study
+
 ---
 
-## 📚 Overview
+## Overview
 
-This document chronicles my personal growth and learning journey through advanced SQL techniques applied to a real-world e-commerce database case study. It documents the concepts I've mastered, challenges I've overcome, and the business insights I've discovered along the way.
-
+This is basically my personal log of learning SQL through building this project. I started out pretty rough with SQL—doing a lot of trial and error—and over time I got more comfortable with the advanced stuff like window functions and CTEs. I'm documenting the concepts I picked up, the stuff that tripped me up along the way, and some of the queries I'm actually proud of. 
 ---
 
-## 🎯 Concepts Mastered
+##  Concepts Mastered
 
 ### 1. **Window Functions**
 Window functions transformed my approach to analytical queries. Rather than using subqueries for ranking and running totals, I now leverage the power of `ROW_NUMBER()`, `RANK()`, `DENSE_RANK()`, and `LAG()`/`LEAD()` functions.
@@ -92,7 +97,7 @@ I've developed proficiency in translating business questions into SQL queries.
 
 ---
 
-## 🏔️ Challenges Overcome
+## Challenges Overcome
 
 ### Challenge 1: Understanding Join Logic with Multiple Tables
 **Problem:** Initial attempts to join 4+ tables resulted in duplicate rows and inflated metrics.
@@ -151,7 +156,7 @@ I've developed proficiency in translating business questions into SQL queries.
 
 ---
 
-## 💡 Key Business Insights Discovered
+## Key Business Insights Discovered
 
 ### Insight 1: Customer Concentration
 Discovered that a small percentage of customers (top 10%) generate a disproportionate portion of revenue—approximately 60-70% of total sales.
@@ -197,7 +202,7 @@ Geographic regions show significant variation in sales volume, average order val
 
 ---
 
-## 🌟 Queries I'm Most Proud Of
+## Queries I'm Most Proud Of
 
 ### Query 1: Customer RFM Segmentation
 ```sql
@@ -246,7 +251,7 @@ Geographic regions show significant variation in sales volume, average order val
 
 ---
 
-## 🚧 Challenges Faced (Ongoing)
+## Challenges Faced (Ongoing)
 
 ### 1. Balancing Readability vs. Performance
 **Challenge:** More readable CTEs sometimes result in less efficient query plans.
@@ -270,7 +275,7 @@ Geographic regions show significant variation in sales volume, average order val
 
 ---
 
-## 🎓 Advanced SQL Techniques Mastered
+## Advanced SQL Techniques Mastered
 
 ### 1. **Advanced Window Functions**
 - `ROW_NUMBER()` for unique row identification within partitions
@@ -305,7 +310,7 @@ Geographic regions show significant variation in sales volume, average order val
 
 ---
 
-## 🔮 Future Learning Goals
+## Future Learning Goals
 
 ### 1. **SQL Performance Optimization**
 - Deepen understanding of query execution plans
@@ -345,7 +350,7 @@ Geographic regions show significant variation in sales volume, average order val
 
 ---
 
-## 📊 Personal Growth Summary
+## Personal Growth Summary
 
 | Aspect | Beginning | Current | Goal |
 |--------|-----------|---------|------|
@@ -357,7 +362,7 @@ Geographic regions show significant variation in sales volume, average order val
 
 ---
 
-## 🎬 Conclusion
+## Conclusion
 
 This e-commerce case study has been transformative in my SQL journey. I've evolved from writing simple queries to conducting sophisticated multi-dimensional business analysis. The combination of technical skill development and business insight discovery has created a powerful foundation.
 
@@ -367,9 +372,5 @@ I'm committed to continuing this learning journey, with a focus on optimization,
 
 ---
 
-## 📝 Last Updated
-December 10, 2025 - Initial comprehensive learning documentation
-
----
-
-**Remember:** SQL mastery is a journey, not a destination. Each query is an opportunity to learn, optimize, and discover new insights.
+## Last Updated
+December 19, 2025 - Initial comprehensive learning documentation
