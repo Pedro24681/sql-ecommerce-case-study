@@ -421,18 +421,19 @@ Customer %  Revenue %  Cumulative %
 
 **Mobile vs. Desktop Trends:**
 
-```
-          2024      2025      Growth
-Mobile    32%       48%       +50%
-Desktop   58%       45%       -22%
-Tablet    10%       7%        -30%
-```
+### Conclusion
 
-**Mobile-Specific Insights:**
-- Mobile conversion rate: 2.8% (vs. 4.2% desktop)
-- Mobile cart abandonment: 78% (vs. 68% desktop)
-- Mobile AOV: $95 (vs. $130 desktop)
+Looking at this business overall, the numbers show a solid foundation with a lot of room to improve. The data tells a pretty clear story about where the company can grow—keeping more customers happy, pushing order values up, and smoothing out the operations. 
 
+The roadmap I laid out isn't trying to overhaul everything at once. Instead, it breaks things down into phases that make sense to tackle together—quick wins first to build momentum, then bigger infrastructure stuff as things stabilize.
+
+What I'm really confident about is that if the team commits to the data-driven approach, they should hit those targets I mentioned: 
+- **18% revenue growth** in the next 12 months
+- **20% improvement** in customer lifetime value  
+- **15% reduction** in operational costs
+- **Entry into 2 new geographic markets** with projected $1.1M incremental revenue
+
+The key is staying focused on the fundamentals—making decisions based on data, keeping communication clean across teams, and not losing sight of the customer in all of this. 
 **Mobile Experience Improvements (Estimated Impact):**
 - Optimize checkout flow → Reduce abandonment to 65% → +$185K revenue
 - Streamline product discovery → Increase conversion to 3.5% → +$225K revenue
