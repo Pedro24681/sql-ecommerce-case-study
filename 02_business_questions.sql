@@ -1,12 +1,14 @@
 -- =====================================================
 -- E-Commerce SQL Case Study – Business Questions
 -- =====================================================
--- File: 02_business_questions.sql
+-- 
+-- This file is basically my "playbook" for answering real business questions. 
+-- The kinds of questions that actually matter to the business: 
+-- Which products make us money? Who are our best customers? Are people coming back?
+-- Each query tries to answer one of these in a way that's actually useful.
 --
--- This file I made answers a set of core business questions using SQL.
--- Each query is written to reflect how a data analyst would
--- approach real world e-commerce problems such as revenue analysis,
--- customer behavior, and churn risk.
+-- I wrote these to show how a real data analyst thinks about problems—not just
+-- "write a query" but "what is the business actually trying to know here?"
 --
 -- Environment:
 -- - PostgreSQL 12+
