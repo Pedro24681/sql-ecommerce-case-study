@@ -5,11 +5,18 @@
 [![Analytics](https://img.shields.io/badge/Analytics-Business%20Intelligence-green.svg)](https://github.com/Pedro24681/sql-ecommerce-case-study)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
+# SQL E-Commerce Analytics Case Study
+
+[![SQL](https://img.shields.io/badge/SQL-Advanced-blue.svg)](https://www.mysql.com/)
+[![Database](https://img.shields.io/badge/Database-MySQL%20%7C%20PostgreSQL-orange.svg)](https://www.postgresql.org/)
+[![Analytics](https://img.shields.io/badge/Analytics-Business%20Intelligence-green.svg)](https://github.com/Pedro24681/sql-ecommerce-case-study)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 > # SQL E-Commerce Analytics Case Study
 
-In this project, I worked with a realistic e-commerce dataset to explore real business questions using SQL. My goal was to build analytical queries that help answer questions about sales performance, customer behavior, and product trends — the kinds of questions a data analyst would tackle in a real company.
+I built this project to get hands on experience with real world e-commerce data and SQL analytics. Started with a realistic dataset and wrote queries to answer actual business questions, stuff like who our best customers are, which products make the most money, and where we're seeing trends over time.
 
-I designed the database schema, wrote queries to answer specific business questions, and used advanced SQL features like window functions and CTEs to derive deeper insights. Throughout this case study I document my approach, share results, and explain what the findings mean in a business context.
+The whole process involved designing the database from scratch, writing queries to dig into the data, and using some more advanced SQL techniques like window functions and CTEs to pull out deeper insights.  It's been a great way to learn how to think about data problems. 
 
 
 
