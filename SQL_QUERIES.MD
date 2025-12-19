@@ -1,8 +1,6 @@
 # SQL Queries
 
-This file lists the SQL queries I wrote for this project, with runnable examples and brief comments. The corresponding plain language descriptions are in `QUERY_DESCRIPTIONS.md`.
-
-
+Here's a collection of the SQL queries I put together for this project.  Each one has a quick runnable example and some notes on what it's doing.  If you want more explanation on what the queries are actually answering, check out `QUERY_DESCRIPTIONS.md`.
 # Total Revenue by Customer
 
 ```sql
