@@ -1,12 +1,13 @@
 -- ============================================================================
 -- Advanced Analytics Queries – E-Commerce SQL Case Study
 -- ============================================================================
--- File: 03_advanced_analytics.sql
+-- 
+-- This is where I put the "fancier" SQL stuff—the things that take a bit more thought. 
+-- Window functions, CTEs chained together, cohort retention tracking, market basket analysis. 
+-- Real stuff that you'd see in analytics work.
 --
--- This file is a “playbook” of more advanced analytics patterns you’ll see in
--- real analyst work: window functions, CTE pipelines, growth calculations,
--- cohort retention, and a few deeper cuts like basket analysis.
---
+-- The queries here are more about patterns and trends.  Like: are we losing customers? 
+-- Which products are people buying together? How do different customer groups behave?
 -- Dialect note:
 -- Some queries use SQL Server date functions (DATEDIFF/DATEADD/DATEPART/GETDATE),
 -- while other parts follow patterns commonly used in PostgreSQL.
