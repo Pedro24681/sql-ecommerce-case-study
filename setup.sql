@@ -1,17 +1,18 @@
 -- ============================================================================
 -- E-COMMERCE DATABASE SETUP SCRIPT
 -- ============================================================================
--- Purpose: Complete automated setup for the e-commerce case study database
--- Includes: Database creation, schema setup, and sample data loading
--- Author: Pedro24681
--- Database: MySQL 8.0+ / PostgreSQL 12+ (with minor adjustments)
+-- This script sets up the entire database for the e-commerce case study. 
+-- It creates all the tables, loads in the sample data, and sets up indexes.
+-- Run this once and you're good to go—no manual table creation needed. 
+--
+-- Works with:  MySQL 8.0+ or PostgreSQL 12+ (just swap a couple date functions)
 -- ============================================================================
-
 -- ============================================================================
 -- STEP 1: DATABASE INITIALIZATION
 -- ============================================================================
+-- First thing:  drop the database if it exists (clean slate) and create a fresh one. 
+-- This makes it safe to run the script multiple times without conflicts. 
 
--- Drop and recreate database for clean setup
 DROP DATABASE IF EXISTS ecommerce_analytics;
 CREATE DATABASE ecommerce_analytics;
 USE ecommerce_analytics;
@@ -27,7 +28,8 @@ SELECT 'Database created successfully' AS Status;
 -- ----------------------------------------------------------------------------
 -- Customers Table
 -- ----------------------------------------------------------------------------
--- Stores customer master data with lifetime value and activity tracking
+-- Customers table – stores who's buying, where they're from, and how valuable they are
+CREATE TABLE Customers (
 CREATE TABLE Customers (
     CustomerID VARCHAR(10) PRIMARY KEY,
     CustomerName VARCHAR(100) NOT NULL,
@@ -46,7 +48,8 @@ CREATE TABLE Customers (
 -- ----------------------------------------------------------------------------
 -- Products Table
 -- ----------------------------------------------------------------------------
--- Product catalog with pricing and inventory information
+-- Products table – what we're selling, how much it costs, and how much we have in stock
+CREATE TABLE Products (
 CREATE TABLE Products (
     ProductID VARCHAR(10) PRIMARY KEY,
     ProductName VARCHAR(150) NOT NULL,
@@ -60,7 +63,8 @@ CREATE TABLE Products (
     INDEX idx_product_name (ProductName)
 );
 
--- ----------------------------------------------------------------------------
+-- Orders table – every order a customer places, total spent, and status
+CREATE TABLE Orders (
 -- Orders Table
 -- ----------------------------------------------------------------------------
 -- Order header information with customer relationships
@@ -74,7 +78,8 @@ CREATE TABLE Orders (
     FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID),
     INDEX idx_order_date (OrderDate),
     INDEX idx_order_customer (CustomerID),
-    INDEX idx_order_status (OrderStatus)
+    -- Order_Details table – breaks down each order into individual line items (which products, how many, what price)
+CREATE TABLE Order_Details (
 );
 
 -- ----------------------------------------------------------------------------
@@ -102,10 +107,8 @@ SELECT 'Tables created successfully' AS Status;
 -- ============================================================================
 
 -- ----------------------------------------------------------------------------
--- Load Customers Data
--- ----------------------------------------------------------------------------
--- Using INSERT statements for portability
--- In production, use LOAD DATA INFILE for better performance
+-- I'm using INSERT statements here so the script works on any database. 
+-- In production, you'd use LOAD DATA INFILE for speed, but this is more portable.
 
 INSERT INTO Customers (CustomerID, CustomerName, Email, Country, City, SignUpDate, LifetimeValue, LastPurchaseDate, IsActive) VALUES
 ('C001', 'John Anderson', 'john.anderson@email.com', 'USA', 'New York', '2023-01-15', 2450.50, '2025-12-08', TRUE),
